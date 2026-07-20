@@ -2,8 +2,30 @@
 //
 // SPDX-License-Identifier: MIT
 
+pragma ComponentBehavior: Bound
+
+import QtQuick
+
 import qs.Modules.Plugins
+
+import "logic"
+import "views"
 
 PluginComponent {
     id: root
+
+    readonly property WirelessBatterySource source: WirelessBatteryUPowerSource {}
+
+    readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
+        source: root.source
+    }
+
+    horizontalBarPill: Component {
+        WirelessBatteryHorizontalPill {
+            viewModel: root.viewModel
+            iconSize: root.iconSize
+            barThickness: root.barThickness
+            barConfig: root.barConfig
+        }
+    }
 }

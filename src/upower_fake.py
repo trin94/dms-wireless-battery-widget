@@ -51,6 +51,7 @@ class UPowerDevice(QObject):
     stateChanged = Signal(int)
     percentageChanged = Signal(float)
     modelChanged = Signal(str)
+    nativePathChanged = Signal(str)
     timeToEmptyChanged = Signal(float)
     timeToFullChanged = Signal(float)
     readyChanged = Signal(bool)
@@ -61,6 +62,7 @@ class UPowerDevice(QObject):
         self._state = int(UPowerDeviceState.State.Unknown)
         self._percentage = 0.0
         self._model = ""
+        self._native_path = ""
         self._time_to_empty = 0.0
         self._time_to_full = 0.0
         self._ready = True
@@ -104,6 +106,16 @@ class UPowerDevice(QObject):
         if self._model != value:
             self._model = value
             self.modelChanged.emit(value)
+
+    @Property(str, notify=nativePathChanged)
+    def nativePath(self) -> str:
+        return self._native_path
+
+    @nativePath.setter
+    def nativePath(self, value: str) -> None:
+        if self._native_path != value:
+            self._native_path = value
+            self.nativePathChanged.emit(value)
 
     @Property(float, notify=timeToEmptyChanged)
     def timeToEmpty(self) -> float:
