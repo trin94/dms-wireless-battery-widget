@@ -20,13 +20,20 @@ PluginComponent {
         source: root.source
     }
 
-    readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
+    readonly property var _trackedClasses: WirelessBatteryDefaults.trackedClasses(root.pluginData)
+
+    readonly property WirelessBatterySource trackedRoster: WirelessBatteryTrackedClassFilter {
         source: root.roster
+        trackedClasses: root._trackedClasses
+    }
+
+    readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
+        source: root.trackedRoster
         lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
     }
 
     readonly property WirelessBatteryPopoutViewModel popoutViewModel: WirelessBatteryPopoutViewModel {
-        roster: root.roster
+        roster: root.trackedRoster
         source: root.source
         lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
         showsThresholdSplit: root.pluginData.notificationsEnabled ?? WirelessBatteryDefaults.notificationsEnabled
@@ -38,6 +45,8 @@ PluginComponent {
             iconSize: root.iconSize
             barThickness: root.barThickness
             barConfig: root.barConfig
+            showPercentage: root.pluginData.showPercentage ?? WirelessBatteryDefaults.showPercentage
+            showBolt: root.pluginData.showBolt ?? WirelessBatteryDefaults.showBolt
         }
     }
 

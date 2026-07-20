@@ -17,8 +17,10 @@ live stays as a dimmed stale entry at its last reading until the session ends. A
 that drops to its class's low threshold turns red in the bar and raises one desktop notification
 through notify-send, re-arming only after the battery recovers past a margin. Clicking the pill
 opens a popout with per-device detail: name, charge state, a level bar split at the class's low
-threshold, and the time estimate; when there is nothing to show, the popout says why. The
-settings page is not implemented yet. The product spec lives in
+threshold, and the time estimate; when there is nothing to show, the popout says why. A settings
+page lets you turn each device class on or off, tune its low threshold, and toggle notifications,
+the percentage label, and the charging bolt, all applying live without reloading the plugin. The
+product spec lives in
 [issue #1](https://github.com/trin94/dms-wireless-battery-widget/issues/1),
 the domain glossary in [CONTEXT.md](CONTEXT.md), and the architectural decisions in
 [docs/adr](docs/adr). This plugin will supersede

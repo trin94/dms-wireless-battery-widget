@@ -10,6 +10,8 @@ QtObject {
     property string pluginId
     property var pluginService: null
     property var lowThresholds: WirelessBatteryDefaults.lowThresholds(null)
+    property var trackedClasses: WirelessBatteryDefaults.trackedClasses(null)
+    property bool notificationsEnabled: WirelessBatteryDefaults.notificationsEnabled
 
     readonly property Connections _dataWatcher: Connections {
         target: root.pluginService
@@ -27,6 +29,13 @@ QtObject {
             "controllerLowThreshold": root._stored("controllerLowThreshold"),
             "headsetLowThreshold": root._stored("headsetLowThreshold")
         });
+        root.trackedClasses = WirelessBatteryDefaults.trackedClasses({
+            "mouseTracked": root._stored("mouseTracked"),
+            "keyboardTracked": root._stored("keyboardTracked"),
+            "controllerTracked": root._stored("controllerTracked"),
+            "headsetTracked": root._stored("headsetTracked")
+        });
+        root.notificationsEnabled = root._stored("notificationsEnabled") ?? WirelessBatteryDefaults.notificationsEnabled;
     }
 
     function _stored(key: string): var {

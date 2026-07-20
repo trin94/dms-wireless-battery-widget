@@ -30,4 +30,27 @@ TestCase {
         compare(thresholds[WirelessBatteryDevice.DeviceClass.Controller], 35);
         compare(thresholds[WirelessBatteryDevice.DeviceClass.Mouse], 10);
     }
+
+    function test_allClassesAreTrackedByDefault() {
+        const tracked = WirelessBatteryDefaults.trackedClasses(null);
+
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Mouse], true);
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Keyboard], true);
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Controller], true);
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Headset], true);
+    }
+
+    function test_pluginDataOverridesTrackedClasses() {
+        const tracked = WirelessBatteryDefaults.trackedClasses({
+            "keyboardTracked": false
+        });
+
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Keyboard], false);
+        compare(tracked[WirelessBatteryDevice.DeviceClass.Mouse], true);
+    }
+
+    function test_barDisplayTogglesAreOnByDefault() {
+        compare(WirelessBatteryDefaults.showPercentage, true);
+        compare(WirelessBatteryDefaults.showBolt, true);
+    }
 }

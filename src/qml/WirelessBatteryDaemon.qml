@@ -21,10 +21,18 @@ QtObject {
 
     readonly property WirelessBatterySource _source: WirelessBatteryUPowerSource {}
 
-    readonly property WirelessBatteryMonitor _monitor: WirelessBatteryMonitor {
+    readonly property WirelessBatterySource _trackedSource: WirelessBatteryTrackedClassFilter {
         source: root._source
+        trackedClasses: root._settings.trackedClasses
+    }
+
+    readonly property WirelessBatteryMonitor _monitor: WirelessBatteryMonitor {
+        source: root._trackedSource
         lowThresholds: root._settings.lowThresholds
 
-        onLowReading: (deviceName, percent) => Quickshell.execDetached(WirelessBatteryNotification.lowBatteryCommand(deviceName, percent))
+        onLowReading: (deviceName, percent) => {
+            if (root._settings.notificationsEnabled)
+                Quickshell.execDetached(WirelessBatteryNotification.lowBatteryCommand(deviceName, percent));
+        }
     }
 }

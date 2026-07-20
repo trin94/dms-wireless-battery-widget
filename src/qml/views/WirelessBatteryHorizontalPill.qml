@@ -18,6 +18,8 @@ Row {
     required property int iconSize
     required property real barThickness
     required property var barConfig
+    required property bool showPercentage
+    required property bool showBolt
 
     readonly property int textSize: Theme.barTextSize(barThickness, barConfig?.fontScale, barConfig?.maximizeWidgetText)
 
@@ -57,7 +59,7 @@ Row {
                 name: "bolt"
                 size: root.iconSize
                 color: Theme.primary
-                visible: entry.modelData.showsBolt
+                visible: entry.modelData.showsBolt && root.showBolt
                 anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -65,6 +67,7 @@ Row {
                 text: entry.modelData.percentText
                 font.pixelSize: root.textSize
                 color: entry.entryColor
+                visible: root.showPercentage
                 anchors.verticalCenter: parent.verticalCenter
             }
         }

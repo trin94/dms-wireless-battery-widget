@@ -36,12 +36,19 @@ TestCase {
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Keyboard], 10);
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Controller], 20);
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Headset], 20);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Mouse], true);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Keyboard], true);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Controller], true);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Headset], true);
+        compare(store.notificationsEnabled, true);
     }
 
     function test_missingServiceFallsBackToDefaults() {
         const store = makeStore(null);
 
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Mouse], 10);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Mouse], true);
+        compare(store.notificationsEnabled, true);
     }
 
     function test_storedThresholdsOverrideDefaults() {
@@ -55,6 +62,27 @@ TestCase {
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Keyboard], 10);
     }
 
+    function test_storedTrackedClassesOverrideDefaults() {
+        const store = makeStore(makePluginService({
+            [testCase.pluginId]: {
+                "keyboardTracked": false
+            }
+        }));
+
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Keyboard], false);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Mouse], true);
+    }
+
+    function test_storedNotificationsEnabledOverridesDefault() {
+        const store = makeStore(makePluginService({
+            [testCase.pluginId]: {
+                "notificationsEnabled": false
+            }
+        }));
+
+        compare(store.notificationsEnabled, false);
+    }
+
     function test_changesApplyLive() {
         const service = makePluginService();
         const store = makeStore(service);
@@ -62,6 +90,14 @@ TestCase {
         service.savePluginData(testCase.pluginId, "headsetLowThreshold", 42);
 
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Headset], 42);
+
+        service.savePluginData(testCase.pluginId, "controllerTracked", false);
+
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Controller], false);
+
+        service.savePluginData(testCase.pluginId, "notificationsEnabled", false);
+
+        compare(store.notificationsEnabled, false);
     }
 
     function test_otherPluginsDataIsIgnored() {
@@ -69,8 +105,10 @@ TestCase {
         const store = makeStore(service);
 
         service.savePluginData("otherPlugin", "mouseLowThreshold", 99);
+        service.savePluginData("otherPlugin", "mouseTracked", false);
 
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Mouse], 10);
+        compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Mouse], true);
     }
 
     Component {
