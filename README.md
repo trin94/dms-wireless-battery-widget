@@ -10,9 +10,10 @@ A [Dank Material Shell](https://github.com/AvengeMedia/DankMaterialShell) plugin
 battery levels of wireless peripherals — mice, keyboards, game controllers, and headsets — in
 the bar.
 
-Work in progress: every live device reported through UPower shows up in the horizontal bar
-pill with its class icon, battery percentage, and a charging bolt while it charges, in a fixed
-order (mouse, keyboard, controller, headset) that never reshuffles. A device that is no longer
+Work in progress: every live device reported through UPower shows up in the bar pill, in
+horizontal and vertical bars alike, with its class icon, battery percentage, and a charging
+bolt while it charges, in a fixed order (mouse, keyboard, controller, headset) that never
+reshuffles. A device that is no longer
 live stays as a dimmed stale entry at its last reading until the session ends. A draining device
 that drops to its class's low threshold turns red in the bar and raises one desktop notification
 through notify-send, re-arming only after the battery recovers past a margin. Clicking the pill

@@ -19,6 +19,8 @@ ShellRoot {
 
     readonly property string pluginId: "wirelessBatteryWidget"
 
+    property bool verticalBar: false
+
     function _settingKeys(): var {
         const keys = [];
         for (const key in WirelessBatteryDefaults) {
@@ -60,6 +62,17 @@ ShellRoot {
         }
     }
 
+    IpcHandler {
+        target: "bar"
+
+        function vertical(value: string): string {
+            if (value !== "true" && value !== "false")
+                return "vertical expects true or false";
+            root.verticalBar = value === "true";
+            return "vertical = " + value;
+        }
+    }
+
     Connections {
         target: mockPluginService
 
@@ -73,15 +86,21 @@ ShellRoot {
 
         anchors {
             left: true
-            right: true
+            top: root.verticalBar
+            right: !root.verticalBar
             bottom: true
         }
+        implicitWidth: widget.barThickness
         implicitHeight: widget.barThickness
         color: Theme.surfaceContainer
 
         WirelessBatteryWidget {
             id: widget
             parentScreen: bar.screen
+            axis: root.verticalBar ? ({
+                    "isVertical": true,
+                    "edge": "left"
+                }) : null
             anchors.centerIn: parent
         }
     }

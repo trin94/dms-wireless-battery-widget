@@ -4,3 +4,5 @@
 
 WirelessBatteryHorizontalPill WirelessBatteryHorizontalPill.qml
 WirelessBatteryPopout WirelessBatteryPopout.qml
+singleton WirelessBatteryToneColors WirelessBatteryToneColors.qml
+WirelessBatteryVerticalPill WirelessBatteryVerticalPill.qml

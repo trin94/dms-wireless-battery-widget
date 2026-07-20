@@ -50,6 +50,17 @@ PluginComponent {
         }
     }
 
+    verticalBarPill: Component {
+        WirelessBatteryVerticalPill {
+            viewModel: root.viewModel
+            iconSize: root.iconSize
+            barThickness: root.barThickness
+            barConfig: root.barConfig
+            showPercentage: root.pluginData.showPercentage ?? WirelessBatteryDefaults.showPercentage
+            showBolt: root.pluginData.showBolt ?? WirelessBatteryDefaults.showBolt
+        }
+    }
+
     popoutContent: Component {
         WirelessBatteryPopout {
             viewModel: root.popoutViewModel

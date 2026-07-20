@@ -32,6 +32,11 @@ stop:
     pkill -f 'src/mock/serve[.]py' || { echo 'mock bar is not running'; exit 0; }
     echo 'mock bar stopped'
 
+# Turn the mock bar into a vertical (left) bar, or back (true, false)
+[group('bar')]
+@vertical value:
+    qs -p '{{ PREVIEW }}' ipc call bar vertical '{{ value }}' || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+
 # Plug the mock device back in
 [group('device')]
 @connect:

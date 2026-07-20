@@ -9,7 +9,8 @@ QtObject {
 
     required property WirelessBatterySource source
 
-    // One bar entry per device: key, iconName, percentText, showsBolt, tone.
+    // One bar entry per device: key, iconName, percentText, verticalPercentText,
+    // showsBolt, tone. Vertical bars drop the percent sign to fit their width.
     // Fixed order: mouse, keyboard, controller, headset; name as tiebreak.
     readonly property var entries: WirelessBatteryFixedOrder.sorted(root.source?.devices ?? []).map(device => {
         const percent = Math.round(device.level * 100);
@@ -19,6 +20,7 @@ QtObject {
             "key": device.deviceId,
             "iconName": root._iconName(device.deviceClass),
             "percentText": percent + "%",
+            "verticalPercentText": percent.toString(),
             "showsBolt": charging,
             "tone": root._tone(device.live, charging, low)
         };

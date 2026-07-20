@@ -47,6 +47,21 @@ TestCase {
         compare(viewModel.entries[0].percentText, "75%");
     }
 
+    function test_verticalPercentTextIsTheBareNumber() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "level": 1.0,
+                "live": true
+            })];
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries[0].percentText, "100%");
+        compare(viewModel.entries[0].verticalPercentText, "100");
+    }
+
     function test_chargeState_data() {
         return [
             {

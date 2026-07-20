@@ -11,7 +11,7 @@ import qs.Widgets
 
 import "../logic"
 
-Row {
+Column {
     id: root
 
     required property WirelessBatteryViewModel viewModel
@@ -28,7 +28,7 @@ Row {
     Repeater {
         model: root.viewModel.entries
 
-        delegate: Row {
+        delegate: Column {
             id: entry
 
             required property var modelData
@@ -36,12 +36,13 @@ Row {
             readonly property color entryColor: WirelessBatteryToneColors.forTone(modelData.tone)
 
             spacing: Theme.spacingXS
+            anchors.horizontalCenter: parent.horizontalCenter
 
             DankIcon {
                 name: entry.modelData.iconName
                 size: root.iconSize
                 color: entry.entryColor
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             DankIcon {
@@ -49,15 +50,15 @@ Row {
                 size: root.iconSize
                 color: Theme.primary
                 visible: entry.modelData.showsBolt && root.showBolt
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             StyledText {
-                text: entry.modelData.percentText
+                text: entry.modelData.verticalPercentText
                 font.pixelSize: root.textSize
                 color: entry.entryColor
                 visible: root.showPercentage
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
             }
         }
     }
