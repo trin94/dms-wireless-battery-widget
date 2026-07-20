@@ -10,7 +10,8 @@ QtObject {
     required property WirelessBatterySource source
 
     // One bar entry per device: key, iconName, percentText, showsBolt, tone.
-    readonly property var entries: (root.source?.devices ?? []).filter(device => device.live).map(device => {
+    // Fixed order: mouse, keyboard, controller, headset; name as tiebreak.
+    readonly property var entries: (root.source?.devices ?? []).filter(device => device.live).sort((left, right) => left.deviceClass - right.deviceClass || left.name.localeCompare(right.name) || left.deviceId.localeCompare(right.deviceId)).map(device => {
         const charging = device.chargeState !== WirelessBatteryDevice.ChargeState.Discharging;
         return {
             "key": device.deviceId,
@@ -27,6 +28,15 @@ QtObject {
     }
 
     function _iconName(deviceClass: int): string {
-        return "mouse";
+        switch (deviceClass) {
+        case WirelessBatteryDevice.DeviceClass.Keyboard:
+            return "keyboard";
+        case WirelessBatteryDevice.DeviceClass.Controller:
+            return "sports_esports";
+        case WirelessBatteryDevice.DeviceClass.Headset:
+            return "headset";
+        default:
+            return "mouse";
+        }
     }
 }

@@ -25,7 +25,7 @@ TestCase {
         return source;
     }
 
-    function addMouse(overrides = {}) {
+    function addDevice(overrides = {}) {
         return testCase.bridge.addDevice(Object.assign({
             "type": UPowerDeviceType.Mouse,
             "state": UPowerDeviceState.Discharging,
@@ -36,7 +36,7 @@ TestCase {
     }
 
     function test_liveMouseIsDiscovered() {
-        testCase.addMouse();
+        testCase.addDevice();
 
         const source = makeSource();
 
@@ -54,13 +54,13 @@ TestCase {
         const source = makeSource();
         compare(source.devices.length, 0);
 
-        testCase.addMouse();
+        testCase.addDevice();
 
         compare(source.devices.length, 1);
     }
 
     function test_removedMouseDisappears() {
-        const upowerDevice = testCase.addMouse();
+        const upowerDevice = testCase.addDevice();
         const source = makeSource();
         compare(source.devices.length, 1);
 
@@ -69,17 +69,61 @@ TestCase {
         compare(source.devices.length, 0);
     }
 
+    function test_deviceClassMapping_data() {
+        return [
+            {
+                tag: "mouse",
+                type: UPowerDeviceType.Mouse,
+                expected: WirelessBatteryDevice.DeviceClass.Mouse
+            },
+            {
+                tag: "touchpad",
+                type: UPowerDeviceType.Touchpad,
+                expected: WirelessBatteryDevice.DeviceClass.Mouse
+            },
+            {
+                tag: "keyboard",
+                type: UPowerDeviceType.Keyboard,
+                expected: WirelessBatteryDevice.DeviceClass.Keyboard
+            },
+            {
+                tag: "gamingInput",
+                type: UPowerDeviceType.GamingInput,
+                expected: WirelessBatteryDevice.DeviceClass.Controller
+            },
+            {
+                tag: "headset",
+                type: UPowerDeviceType.Headset,
+                expected: WirelessBatteryDevice.DeviceClass.Headset
+            },
+            {
+                tag: "headphones",
+                type: UPowerDeviceType.Headphones,
+                expected: WirelessBatteryDevice.DeviceClass.Headset
+            }
+        ];
+    }
+
+    function test_deviceClassMapping(data) {
+        testCase.addDevice({
+            "type": data.type
+        });
+
+        const source = makeSource();
+
+        compare(source.devices.length, 1);
+        compare(source.devices[0].deviceClass, data.expected);
+    }
+
     function test_unsupportedTypesAreIgnored() {
-        testCase.bridge.addDevice({
-            "type": UPowerDeviceType.Battery,
-            "state": UPowerDeviceState.Discharging,
-            "percentage": 0.5
-        });
-        testCase.bridge.addDevice({
-            "type": UPowerDeviceType.LinePower,
-            "state": UPowerDeviceState.Discharging,
-            "percentage": 0.5
-        });
+        const unsupportedTypes = [UPowerDeviceType.Battery, UPowerDeviceType.LinePower, UPowerDeviceType.Phone, UPowerDeviceType.Tablet, UPowerDeviceType.Speakers, UPowerDeviceType.BluetoothGeneric];
+        for (const type of unsupportedTypes) {
+            testCase.bridge.addDevice({
+                "type": type,
+                "state": UPowerDeviceState.Discharging,
+                "percentage": 0.5
+            });
+        }
 
         const source = makeSource();
 
@@ -118,7 +162,7 @@ TestCase {
     }
 
     function test_liveness(data) {
-        testCase.addMouse(data.overrides);
+        testCase.addDevice(data.overrides);
 
         const source = makeSource();
 
@@ -127,7 +171,7 @@ TestCase {
     }
 
     function test_wakingMouseBecomesLive() {
-        const upowerDevice = testCase.addMouse({
+        const upowerDevice = testCase.addDevice({
             "state": UPowerDeviceState.Unknown,
             "percentage": 0
         });
@@ -169,7 +213,7 @@ TestCase {
     }
 
     function test_chargeStateMapping(data) {
-        testCase.addMouse({
+        testCase.addDevice({
             "state": data.state
         });
 

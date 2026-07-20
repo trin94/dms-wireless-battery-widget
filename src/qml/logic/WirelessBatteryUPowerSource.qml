@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: MIT
 
+pragma ComponentBehavior: Bound
+
 import QtQml
 
 import Quickshell.Services.UPower
@@ -37,7 +39,20 @@ WirelessBatterySource {
     }
 
     function _deviceClassOf(type: int): int {
-        return type === UPowerDeviceType.Mouse ? WirelessBatteryDevice.DeviceClass.Mouse : -1;
+        switch (type) {
+        case UPowerDeviceType.Mouse:
+        case UPowerDeviceType.Touchpad:
+            return WirelessBatteryDevice.DeviceClass.Mouse;
+        case UPowerDeviceType.Keyboard:
+            return WirelessBatteryDevice.DeviceClass.Keyboard;
+        case UPowerDeviceType.GamingInput:
+            return WirelessBatteryDevice.DeviceClass.Controller;
+        case UPowerDeviceType.Headset:
+        case UPowerDeviceType.Headphones:
+            return WirelessBatteryDevice.DeviceClass.Headset;
+        default:
+            return -1;
+        }
     }
 
     function _syncDevices(): void {

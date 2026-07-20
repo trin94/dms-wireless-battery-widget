@@ -86,6 +86,164 @@ TestCase {
         compare(viewModel.entries[0].tone, data.expectedTone);
     }
 
+    function test_iconNameFollowsDeviceClass_data() {
+        return [
+            {
+                tag: "mouse",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Mouse,
+                expectedIconName: "mouse"
+            },
+            {
+                tag: "keyboard",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Keyboard,
+                expectedIconName: "keyboard"
+            },
+            {
+                tag: "controller",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Controller,
+                expectedIconName: "sports_esports"
+            },
+            {
+                tag: "headset",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Headset,
+                expectedIconName: "headset"
+            }
+        ];
+    }
+
+    function test_iconNameFollowsDeviceClass(data) {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "device-1",
+                "deviceClass": data.deviceClass,
+                "level": 0.5,
+                "live": true
+            })];
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries[0].iconName, data.expectedIconName);
+    }
+
+    function test_sameClassDevicesGetOwnEntriesOrderedByName() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "mouse-b",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "Pro Click",
+                "level": 0.6,
+                "live": true
+            }), makeDevice({
+                "deviceId": "mouse-a",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "MX Master 3S",
+                "level": 0.75,
+                "live": true
+            })];
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b"]);
+    }
+
+    function test_entriesFollowFixedClassOrder() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "headset-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Headset,
+                "name": "Arctis Nova",
+                "level": 0.5,
+                "live": true
+            }), makeDevice({
+                "deviceId": "controller-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Controller,
+                "name": "DualSense",
+                "level": 0.5,
+                "live": true
+            }), makeDevice({
+                "deviceId": "keyboard-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Keyboard,
+                "name": "MX Keys",
+                "level": 0.5,
+                "live": true
+            }), makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "MX Master 3S",
+                "level": 0.5,
+                "live": true
+            })];
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-1", "keyboard-1", "controller-1", "headset-1"]);
+    }
+
+    function test_livenessChangesNeverReshuffleEntries() {
+        const source = makeSource();
+        const flickeringDevice = makeDevice({
+            "deviceId": "mouse-a",
+            "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+            "name": "MX Master 3S",
+            "level": 0.75,
+            "live": true
+        });
+        source.devices = [flickeringDevice, makeDevice({
+                "deviceId": "mouse-b",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "Pro Click",
+                "level": 0.6,
+                "live": true
+            }), makeDevice({
+                "deviceId": "keyboard-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Keyboard,
+                "name": "MX Keys",
+                "level": 0.5,
+                "live": true
+            })];
+        const viewModel = makeViewModel(source);
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+
+        flickeringDevice.live = false;
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-b", "keyboard-1"]);
+
+        flickeringDevice.live = true;
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+    }
+
+    function test_devicesLeavingAndReturningNeverReshuffle() {
+        const source = makeSource();
+        const leaverProperties = {
+            "deviceId": "mouse-a",
+            "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+            "name": "MX Master 3S",
+            "level": 0.75,
+            "live": true
+        };
+        const remaining = [makeDevice({
+                "deviceId": "mouse-b",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "Pro Click",
+                "level": 0.6,
+                "live": true
+            }), makeDevice({
+                "deviceId": "keyboard-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Keyboard,
+                "name": "MX Keys",
+                "level": 0.5,
+                "live": true
+            })];
+        source.devices = [makeDevice(leaverProperties), ...remaining];
+        const viewModel = makeViewModel(source);
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+
+        source.devices = remaining;
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-b", "keyboard-1"]);
+
+        source.devices = [...remaining, makeDevice(leaverProperties)];
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+    }
+
     function test_onlyLiveDevicesBecomeEntries() {
         const source = makeSource();
         source.devices = [makeDevice({
