@@ -37,6 +37,8 @@ Row {
                     return Theme.primary;
                 case WirelessBatteryViewModel.Tone.Stale:
                     return Theme.surfaceTextMedium;
+                case WirelessBatteryViewModel.Tone.Low:
+                    return Theme.error;
                 default:
                     return Theme.surfaceText;
                 }

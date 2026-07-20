@@ -125,6 +125,73 @@ TestCase {
         compare(viewModel.entries[0].iconName, data.expectedIconName);
     }
 
+    function test_lowTone_data() {
+        return [
+            {
+                tag: "lowDraining",
+                level: 0.1,
+                chargeState: WirelessBatteryDevice.ChargeState.Discharging,
+                live: true,
+                expectedTone: WirelessBatteryViewModel.Tone.Low
+            },
+            {
+                tag: "drainingAboveThreshold",
+                level: 0.11,
+                chargeState: WirelessBatteryDevice.ChargeState.Discharging,
+                live: true,
+                expectedTone: WirelessBatteryViewModel.Tone.Normal
+            },
+            {
+                tag: "lowButCharging",
+                level: 0.1,
+                chargeState: WirelessBatteryDevice.ChargeState.Charging,
+                live: true,
+                expectedTone: WirelessBatteryViewModel.Tone.Charging
+            },
+            {
+                tag: "lowButStale",
+                level: 0.1,
+                chargeState: WirelessBatteryDevice.ChargeState.Discharging,
+                live: false,
+                expectedTone: WirelessBatteryViewModel.Tone.Stale
+            }
+        ];
+    }
+
+    function test_lowTone(data) {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "level": data.level,
+                "chargeState": data.chargeState,
+                "live": data.live
+            })];
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries[0].tone, data.expectedTone);
+    }
+
+    function test_lowThresholdsFollowSettings() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "level": 0.4,
+                "chargeState": WirelessBatteryDevice.ChargeState.Discharging,
+                "live": true
+            })];
+        const viewModel = makeViewModel(source);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+
+        const thresholds = {};
+        thresholds[WirelessBatteryDevice.DeviceClass.Mouse] = 50;
+        viewModel.lowThresholds = thresholds;
+
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Low);
+    }
+
     function test_sameClassDevicesGetOwnEntriesOrderedByName() {
         const source = makeSource();
         source.devices = [makeDevice({

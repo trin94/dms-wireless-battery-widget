@@ -36,3 +36,12 @@ A tracked device is live while a source is currently reporting its battery.
 A tracked device is stale while it is shown at its last reading without being live. Stale devices
 are forgotten when the session ends.
 *Avoid*: sleeping, disconnected, offline
+
+**Low Threshold**:
+The per-class percentage at or below which a draining tracked device counts as low, driving the
+low tone in the bar and the desktop notification.
+*Avoid*: warning level, alarm level
+
+**Re-arm Margin**:
+How far above its low threshold a device must recover before another notification may fire.
+*Avoid*: hysteresis, debounce

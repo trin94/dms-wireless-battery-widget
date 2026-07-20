@@ -22,6 +22,7 @@ PluginComponent {
 
     readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
         source: root.roster
+        lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
     }
 
     horizontalBarPill: Component {

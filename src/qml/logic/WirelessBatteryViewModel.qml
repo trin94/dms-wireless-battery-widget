@@ -12,26 +12,33 @@ QtObject {
     // One bar entry per device: key, iconName, percentText, showsBolt, tone.
     // Fixed order: mouse, keyboard, controller, headset; name as tiebreak.
     readonly property var entries: (root.source?.devices ?? []).slice().sort((left, right) => left.deviceClass - right.deviceClass || left.name.localeCompare(right.name) || left.deviceId.localeCompare(right.deviceId)).map(device => {
+        const percent = Math.round(device.level * 100);
         const charging = device.live && device.chargeState !== WirelessBatteryDevice.ChargeState.Discharging;
+        const low = !charging && percent <= (root.lowThresholds[device.deviceClass] ?? -1);
         return {
             "key": device.deviceId,
             "iconName": root._iconName(device.deviceClass),
-            "percentText": Math.round(device.level * 100) + "%",
+            "percentText": percent + "%",
             "showsBolt": charging,
-            "tone": root._tone(device.live, charging)
+            "tone": root._tone(device.live, charging, low)
         };
     })
+
+    property var lowThresholds: WirelessBatteryDefaults.lowThresholds(null)
 
     enum Tone {
         Normal,
         Charging,
-        Stale
+        Stale,
+        Low
     }
 
-    function _tone(live: bool, charging: bool): int {
+    function _tone(live: bool, charging: bool, low: bool): int {
         if (!live)
             return WirelessBatteryViewModel.Tone.Stale;
-        return charging ? WirelessBatteryViewModel.Tone.Charging : WirelessBatteryViewModel.Tone.Normal;
+        if (charging)
+            return WirelessBatteryViewModel.Tone.Charging;
+        return low ? WirelessBatteryViewModel.Tone.Low : WirelessBatteryViewModel.Tone.Normal;
     }
 
     function _iconName(deviceClass: int): string {
