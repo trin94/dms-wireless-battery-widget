@@ -9,7 +9,7 @@ LINK := config_directory() / 'DankMaterialShell' / 'plugins' / file_name(justfil
 
 alias fmt := format
 
-# Preview the widget in a mock bar against a mocked device
+# Preview the widget in a mock bar against mocked devices
 mod mock 'src/mock'
 
 [private]

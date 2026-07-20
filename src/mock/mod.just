@@ -37,40 +37,48 @@ stop:
 @vertical value:
     qs -p '{{ PREVIEW }}' ipc call bar vertical '{{ value }}' || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Plug the mock device back in
+# List the mock devices and their current readings
 [group('device')]
-@connect:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetConnected b true || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+devices:
+    #!/usr/bin/env sh
+    reply=$(busctl --user call {{ CONTROL }} / {{ CONTROL }} ListDevices) || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+    reply=${reply#'s "'}
+    printf '%b\n' "${reply%'"'}"
 
-# Unplug the mock device to preview the stale state
+# Plug a mock device back in
 [group('device')]
-@disconnect:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetConnected b false || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@connect device:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetConnected sb {{ device }} true || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Set the mock battery percentage on the running bar
+# Unplug a mock device to preview the stale state
 [group('device')]
-@percentage value:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetPercentage d {{ value }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@disconnect device:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetConnected sb {{ device }} false || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Set the mock charge state on the running bar (unknown, charging, discharging, empty, full, pending-charge)
+# Set a mock device's battery percentage on the running bar
 [group('device')]
-@state value:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetState s {{ value }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@percentage device value:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetPercentage sd {{ device }} {{ value }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Set the mock product name on the running bar (empty previews the fallback name)
+# Set a mock device's charge state on the running bar (unknown, charging, discharging, empty, full, pending-charge)
 [group('device')]
-@model value:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetModel s '{{ value }}' || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@state device value:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetState ss {{ device }} {{ value }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Set the mock seconds until empty on the running bar (0 hides the estimate)
+# Set a mock device's name on the running bar (empty previews the fallback name)
 [group('device')]
-@time-to-empty seconds:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetTimeToEmpty x {{ seconds }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@name device value:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetModel ss {{ device }} '{{ value }}' || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
-# Set the mock seconds until full on the running bar (0 hides the estimate)
+# Set a mock device's seconds until empty on the running bar (0 hides the estimate)
 [group('device')]
-@time-to-full seconds:
-    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetTimeToFull x {{ seconds }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+@time-to-empty device seconds:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetTimeToEmpty sx {{ device }} {{ seconds }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+
+# Set a mock device's seconds until full on the running bar (0 hides the estimate)
+[group('device')]
+@time-to-full device seconds:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} SetTimeToFull sx {{ device }} {{ seconds }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
 # List the plugin settings the mock accepts and their defaults
 [group('plugin')]
