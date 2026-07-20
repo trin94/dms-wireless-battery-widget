@@ -16,8 +16,12 @@ PluginComponent {
 
     readonly property WirelessBatterySource source: WirelessBatteryUPowerSource {}
 
-    readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
+    readonly property WirelessBatterySource roster: WirelessBatteryRoster {
         source: root.source
+    }
+
+    readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
+        source: root.roster
     }
 
     horizontalBarPill: Component {

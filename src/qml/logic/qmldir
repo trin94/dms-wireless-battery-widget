@@ -4,6 +4,7 @@
 
 singleton WirelessBatteryDefaults WirelessBatteryDefaults.qml
 WirelessBatteryDevice WirelessBatteryDevice.qml
+WirelessBatteryRoster WirelessBatteryRoster.qml
 WirelessBatterySource WirelessBatterySource.qml
 WirelessBatteryUPowerSource WirelessBatteryUPowerSource.qml
 WirelessBatteryViewModel WirelessBatteryViewModel.qml

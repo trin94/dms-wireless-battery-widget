@@ -31,7 +31,16 @@ Row {
 
             required property var modelData
 
-            readonly property color entryColor: modelData.tone === WirelessBatteryViewModel.Tone.Charging ? Theme.primary : Theme.surfaceText
+            readonly property color entryColor: {
+                switch (modelData.tone) {
+                case WirelessBatteryViewModel.Tone.Charging:
+                    return Theme.primary;
+                case WirelessBatteryViewModel.Tone.Stale:
+                    return Theme.surfaceTextMedium;
+                default:
+                    return Theme.surfaceText;
+                }
+            }
 
             spacing: Theme.spacingXS
 

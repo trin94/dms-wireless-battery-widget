@@ -11,20 +11,27 @@ QtObject {
 
     // One bar entry per device: key, iconName, percentText, showsBolt, tone.
     // Fixed order: mouse, keyboard, controller, headset; name as tiebreak.
-    readonly property var entries: (root.source?.devices ?? []).filter(device => device.live).sort((left, right) => left.deviceClass - right.deviceClass || left.name.localeCompare(right.name) || left.deviceId.localeCompare(right.deviceId)).map(device => {
-        const charging = device.chargeState !== WirelessBatteryDevice.ChargeState.Discharging;
+    readonly property var entries: (root.source?.devices ?? []).slice().sort((left, right) => left.deviceClass - right.deviceClass || left.name.localeCompare(right.name) || left.deviceId.localeCompare(right.deviceId)).map(device => {
+        const charging = device.live && device.chargeState !== WirelessBatteryDevice.ChargeState.Discharging;
         return {
             "key": device.deviceId,
             "iconName": root._iconName(device.deviceClass),
             "percentText": Math.round(device.level * 100) + "%",
             "showsBolt": charging,
-            "tone": charging ? WirelessBatteryViewModel.Tone.Charging : WirelessBatteryViewModel.Tone.Normal
+            "tone": root._tone(device.live, charging)
         };
     })
 
     enum Tone {
         Normal,
-        Charging
+        Charging,
+        Stale
+    }
+
+    function _tone(live: bool, charging: bool): int {
+        if (!live)
+            return WirelessBatteryViewModel.Tone.Stale;
+        return charging ? WirelessBatteryViewModel.Tone.Charging : WirelessBatteryViewModel.Tone.Normal;
     }
 
     function _iconName(deviceClass: int): string {

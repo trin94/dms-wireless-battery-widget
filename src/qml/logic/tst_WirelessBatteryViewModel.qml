@@ -205,10 +205,12 @@ TestCase {
         compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
 
         flickeringDevice.live = false;
-        compare(viewModel.entries.map(entry => entry.key), ["mouse-b", "keyboard-1"]);
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
 
         flickeringDevice.live = true;
         compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
     }
 
     function test_devicesLeavingAndReturningNeverReshuffle() {
@@ -244,24 +246,31 @@ TestCase {
         compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
     }
 
-    function test_onlyLiveDevicesBecomeEntries() {
+    function test_staleDeviceBecomesDimmedEntryAtLastReading() {
         const source = makeSource();
         source.devices = [makeDevice({
                 "deviceId": "mouse-1",
                 "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "MX Master 3S",
                 "level": 0.75,
                 "live": true
             }), makeDevice({
                 "deviceId": "mouse-2",
                 "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "Pro Click",
                 "level": 0.4,
+                "chargeState": WirelessBatteryDevice.ChargeState.Charging,
                 "live": false
             })];
 
         const viewModel = makeViewModel(source);
 
-        compare(viewModel.entries.length, 1);
-        compare(viewModel.entries[0].key, "mouse-1");
+        compare(viewModel.entries.length, 2);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[1].key, "mouse-2");
+        compare(viewModel.entries[1].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[1].percentText, "40%");
+        compare(viewModel.entries[1].showsBolt, false);
     }
 
     function test_readingUpdatesPropagateToEntries() {
@@ -288,7 +297,46 @@ TestCase {
         compare(viewModel.entries[0].showsBolt, false);
 
         device.live = false;
-        compare(viewModel.entries.length, 0);
+        compare(viewModel.entries.length, 1);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[0].percentText, "42%");
+    }
+
+    function test_liveToStaleToLiveLoopThroughRoster() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "MX Master 3S",
+                "level": 0.75,
+                "live": true
+            })];
+        const roster = createTemporaryObject(rosterFactory, testCase, {
+            "source": source
+        });
+        verify(roster);
+        const viewModel = makeViewModel(roster);
+        compare(viewModel.entries.length, 1);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].percentText, "75%");
+
+        source.devices = [];
+        wait(0);
+        compare(viewModel.entries.length, 1);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[0].percentText, "75%");
+
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "name": "MX Master 3S",
+                "level": 0.6,
+                "live": true
+            })];
+        wait(0);
+        compare(viewModel.entries.length, 1);
+        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].percentText, "60%");
     }
 
     Component {
@@ -301,6 +349,12 @@ TestCase {
         id: deviceFactory
 
         WirelessBatteryDevice {}
+    }
+
+    Component {
+        id: rosterFactory
+
+        WirelessBatteryRoster {}
     }
 
     Component {
