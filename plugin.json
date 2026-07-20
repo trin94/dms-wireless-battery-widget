@@ -1,0 +1,21 @@
+{
+    "$schema": "https://raw.githubusercontent.com/AvengeMedia/DankMaterialShell/refs/heads/master/quickshell/PLUGINS/plugin-schema.json",
+    "id": "wirelessBatteryWidget",
+    "name": "Wireless Battery Widget",
+    "description": "Shows wireless peripheral battery levels in the bar",
+    "version": "0.1.0",
+    "author": "Elias Mueller",
+    "homepage": "https://github.com/trin94/dms-wireless-battery-widget",
+    "icon": "battery_full",
+    "type": "widget",
+    "capabilities": ["dankbar-widget", "battery", "peripheral"],
+    "components": {
+        "widget": "./src/qml/WirelessBatteryWidget.qml",
+        "daemon": "./src/qml/WirelessBatteryDaemon.qml"
+    },
+    "settings": "./src/qml/WirelessBatterySettings.qml",
+    "startupCheck": "./src/qml/WirelessBatteryStartupCheck.qml",
+    "requires_dms": ">=1.5.0",
+    "dependencies": ["notify-send"],
+    "permissions": ["settings_read", "settings_write", "process"]
+}

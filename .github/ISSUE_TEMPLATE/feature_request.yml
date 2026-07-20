@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+name: Feature request
+description: Suggest an idea or improvement for the Wireless Battery Widget plugin
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion. Please describe the problem before the
+        solution so the need is clear.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is missing or awkward today, and the use case behind it.
+      placeholder: I can't tell at a glance which of my two mice the pill refers to.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What you'd like to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches or workarounds you've tried or thought about.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else, e.g. mockups, related DMS features, or links.
+    validations:
+      required: false

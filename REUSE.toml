@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+version = 1
+
+[[annotations]]
+path = "plugin.json"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Elias Mueller"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "uv.lock"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Elias Mueller"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["CONTEXT.md", "docs/adr/*.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Elias Mueller"
+SPDX-License-Identifier = "MIT"

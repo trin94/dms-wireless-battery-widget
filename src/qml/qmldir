@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+WirelessBatteryDaemon WirelessBatteryDaemon.qml
+WirelessBatterySettings WirelessBatterySettings.qml
+WirelessBatteryStartupCheck WirelessBatteryStartupCheck.qml
+WirelessBatteryWidget WirelessBatteryWidget.qml

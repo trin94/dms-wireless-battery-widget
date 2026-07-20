@@ -1,0 +1,205 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+# Configuration file for `prek`, a git hook framework written in Rust.
+# See https://prek.j178.dev for more information.
+#:schema https://www.schemastore.org/prek.json
+
+[[repos]]
+repo = "builtin"
+hooks = [
+    { id = "end-of-file-fixer", name = "fix newlines" },
+    { id = "trailing-whitespace", name = "fix whitespace" },
+]
+
+[[repos]]
+repo = "https://github.com/biomejs/pre-commit"
+rev = "v2.5.4"
+hooks = [
+    {
+        id = "biome-check",
+        name = "format json",
+        files = '\.(jsonc?)$',
+        exclude = '\.config/biome\.jsonc',
+        args = ["--config-path=.config"],
+    },
+]
+
+[[repos]]
+repo = "https://github.com/tombi-toml/tombi-pre-commit"
+rev = "v1.2.4"
+hooks = [
+    {
+        id = "tombi-format",
+        name = "format toml",
+        exclude = "uv.lock",
+        args = [
+            "--offline",
+        ]
+    },
+]
+
+[[repos]]
+repo = "https://github.com/google/yamlfmt"
+rev = "v0.21.0"
+hooks = [
+    {
+        id = "yamlfmt",
+        name = "format yaml",
+        args = ["-conf", ".config/yamlfmt.yaml"],
+    },
+]
+
+[[repos]]
+repo = "https://github.com/rvben/rumdl-pre-commit"
+rev = "v0.2.37"
+hooks = [
+    {
+        id = "rumdl",
+        name = "format markdown",
+        exclude = ".github/",
+        args = ["--fix", "--config", ".config/rumdl.toml"],
+    },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+    {
+        id = "ruff-check",
+        name = "lint python",
+        entry = "ruff check",
+        language = "system",
+        types = ["python"],
+        require_serial = true,
+        args = ["--fix"],
+    },
+    {
+        id = "ruff-format",
+        name = "format python",
+        entry = "ruff format",
+        language = "system",
+        types = ["python"],
+        require_serial = true,
+    },
+]
+
+[[repos]]
+repo = "https://github.com/facebook/pyrefly-pre-commit"
+rev = "1.2.0.dev2"
+hooks = [
+    {
+        id = "pyrefly-check",
+        name = "typecheck python",
+        language = "system",
+        pass_filenames = false,
+    },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+    {
+        id = "just-fmt",
+        name = "format justfile",
+        entry = "just --fmt",
+        language = "system",
+        files = "^[Jj]ustfile$",
+        pass_filenames = false,
+    },
+]
+
+[[repos]]
+repo = "https://github.com/trin94/qml-import-sort"
+rev = "v0.4.0"
+hooks = [
+    {
+        id = "qml-import-sort",
+        name = "sort qml imports",
+        args = ["--group", "qs."],
+    },
+]
+
+[[repos]]
+repo = "https://github.com/tomas-krupa/qmlformat-hook.git"
+rev = "1.2.0"
+hooks = [
+    {
+        id = "qmlformat",
+        additional_dependencies = ["PySide6-Essentials==6.11.1"],
+        files = '.*\.qml$',
+        name = "format qml",
+        args = ["--settings", ".config/qmlformat.ini"]
+    },
+]
+
+[[repos]]
+repo = "local"
+hooks = [
+    {
+        id = "qmllint",
+        name = "lint qml",
+        entry = "uv run src/lint_qml.py",
+        language = "system",
+        files = '\.qml$',
+        exclude = "^src/mock/preview/",
+        require_serial = true,
+    },
+]
+
+[[repos]]
+repo = "https://github.com/fsfe/reuse-tool"
+rev = "v6.2.0"
+hooks = [
+    {
+        id = "reuse-lint-file",
+        name = "lint licenses",
+    },
+]
+
+[[repos]]
+repo = "https://github.com/python-jsonschema/check-jsonschema"
+rev = "0.37.4"
+hooks = [
+    {
+        id = "check-jsonschema",
+        name = "validate plugin.json",
+        files = '^plugin\.json$',
+        args = [
+            "--schemafile",
+            "https://raw.githubusercontent.com/AvengeMedia/DankMaterialShell/refs/heads/master/quickshell/PLUGINS/plugin-schema.json",
+        ],
+    },
+]
+
+[[repos]]
+repo = "https://github.com/crate-ci/typos"
+rev = "v1.48.0"
+hooks = [
+    {
+        id = "typos",
+        name = "check spelling",
+        exclude = "uv.lock",
+    },
+]
+
+[[repos]]
+repo = "https://github.com/rhysd/actionlint"
+rev = "v1.7.12"
+hooks = [
+    {
+        id = "actionlint",
+        name = "lint workflows",
+    },
+]
+
+[[repos]]
+repo = "https://github.com/zizmorcore/zizmor-pre-commit"
+rev = "v1.27.0"
+hooks = [
+    {
+        id = "zizmor",
+        name = "audit workflows",
+    },
+]

@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+name: Bug report
+description: Report a problem with the Wireless Battery Widget plugin
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a report. Please fill in the sections below so the
+        issue can be reproduced.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: What went wrong, and what you expected instead.
+      placeholder: The pill shows a dash even though my mouse is connected and charged.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Connect the device
+        2. Add the widget to the bar
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      description: |
+        The `version` from `plugin.json`. If you run from a clone, also add the
+        commit: `git -C <repo> rev-parse --short HEAD`.
+      placeholder: 0.1.0 (4219a01)
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        Output of `dms doctor`. It reports your distribution, DMS version,
+        Quickshell version, and compositor.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: devices
+    attributes:
+      label: Devices
+      description: |
+        The affected device models and their UPower info:
+        `for d in $(upower -e); do upower -i "$d"; done`
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant Quickshell / DMS output, e.g. from running `dms run` in a terminal.
+      render: text
+    validations:
+      required: false
