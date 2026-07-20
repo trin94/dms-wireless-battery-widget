@@ -21,3 +21,9 @@ path = ["CONTEXT.md", "docs/adr/*.md"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Elias Mueller"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = "docs/preview.webp"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Elias Mueller"
+SPDX-License-Identifier = "MIT"

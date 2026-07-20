@@ -71,6 +71,11 @@ ShellRoot {
             root.verticalBar = value === "true";
             return "vertical = " + value;
         }
+
+        function popout(): string {
+            widget.triggerPopout();
+            return "popout toggled";
+        }
     }
 
     Connections {

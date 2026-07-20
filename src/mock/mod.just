@@ -37,6 +37,11 @@ stop:
 @vertical value:
     qs -p '{{ PREVIEW }}' ipc call bar vertical '{{ value }}' || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
+# Toggle the widget popout on the mock bar
+[group('bar')]
+@popout:
+    qs -p '{{ PREVIEW }}' ipc call bar popout || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+
 # List the mock devices and their current readings
 [group('device')]
 devices:
