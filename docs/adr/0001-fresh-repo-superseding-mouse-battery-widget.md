@@ -1,0 +1,3 @@
+# Fresh repo instead of evolving mouse-battery-widget
+
+This plugin covers battery reporting for all wireless peripherals (mice, keyboards, game controllers, headsets), which mouse-battery-widget does for mice only. We build it as a new repo seeded with mouse-battery-widget's tooling and test harness rather than evolving that repo in place: multi-device support changes the domain model at its root (device discovery, view model, settings, and notifications all assume exactly one mouse), and a fresh start avoids dragging mouse-only naming through a rename while keeping the released plugin stable for its users. mouse-battery-widget is expected to be superseded by this plugin.
