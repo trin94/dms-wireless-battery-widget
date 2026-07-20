@@ -25,6 +25,13 @@ PluginComponent {
         lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
     }
 
+    readonly property WirelessBatteryPopoutViewModel popoutViewModel: WirelessBatteryPopoutViewModel {
+        roster: root.roster
+        source: root.source
+        lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
+        showsThresholdSplit: root.pluginData.notificationsEnabled ?? WirelessBatteryDefaults.notificationsEnabled
+    }
+
     horizontalBarPill: Component {
         WirelessBatteryHorizontalPill {
             viewModel: root.viewModel
@@ -33,4 +40,17 @@ PluginComponent {
             barConfig: root.barConfig
         }
     }
+
+    popoutContent: Component {
+        WirelessBatteryPopout {
+            viewModel: root.popoutViewModel
+        }
+    }
+
+    readonly property int _popoutRowHeight: 72
+    readonly property int _popoutPadding: 32
+    readonly property int _popoutEmptyHeight: 80
+
+    popoutWidth: 340
+    popoutHeight: root.popoutViewModel.rows.length > 0 ? root.popoutViewModel.rows.length * root._popoutRowHeight + root._popoutPadding : root._popoutEmptyHeight
 }

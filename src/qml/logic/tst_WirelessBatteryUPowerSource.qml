@@ -212,6 +212,18 @@ TestCase {
         ];
     }
 
+    function test_timeEstimatesAreMapped() {
+        testCase.addDevice({
+            "timeToEmpty": 7200,
+            "timeToFull": 1800
+        });
+
+        const source = makeSource();
+
+        compare(source.devices[0].timeToEmpty, 7200);
+        compare(source.devices[0].timeToFull, 1800);
+    }
+
     function test_chargeStateMapping(data) {
         testCase.addDevice({
             "state": data.state

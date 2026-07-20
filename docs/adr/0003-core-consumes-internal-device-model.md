@@ -1,7 +1,8 @@
 # Core consumes an internal device model, UPower is an adapter
 
 The core (view models, monitoring, notifications) never touches `UPowerDevice` directly. It
-consumes an internal device shape — id, class, name, battery level, charge state, liveness —
+consumes an internal device shape — id, class, name, battery level, charge state, time
+estimates, liveness —
 produced by a source adapter, with UPower as the only source at ship. Two reasons: tests feed
 fake devices into the core without a D-Bus/UPower fake underneath, and devices invisible to
 UPower can be added later as another adapter without reshaping the model. Concrete case: the

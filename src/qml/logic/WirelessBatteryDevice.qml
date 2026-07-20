@@ -10,6 +10,8 @@ QtObject {
     property string name
     property real level
     property int chargeState
+    property real timeToEmpty
+    property real timeToFull
     property bool live
 
     enum DeviceClass {

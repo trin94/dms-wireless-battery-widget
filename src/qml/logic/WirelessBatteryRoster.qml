@@ -18,7 +18,9 @@ WirelessBatterySource {
                 "deviceClass": device.deviceClass,
                 "name": device.name,
                 "level": device.level,
-                "chargeState": device.chargeState
+                "chargeState": device.chargeState,
+                "timeToEmpty": device.timeToEmpty,
+                "timeToFull": device.timeToFull
             }))
 
     readonly property Component _snapshotFactory: Component {

@@ -45,3 +45,8 @@ low tone in the bar and the desktop notification.
 **Re-arm Margin**:
 How far above its low threshold a device must recover before another notification may fire.
 *Avoid*: hysteresis, debounce
+
+**Time Estimate**:
+The remaining time a source predicts for a live device: to empty while draining, to full while
+charging. Stale devices have no time estimate.
+*Avoid*: runtime, battery life

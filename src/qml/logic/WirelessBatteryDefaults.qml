@@ -11,6 +11,7 @@ import QtQuick
 QtObject {
     id: root
 
+    readonly property bool notificationsEnabled: true
     readonly property int mouseLowThreshold: 10
     readonly property int keyboardLowThreshold: 10
     readonly property int controllerLowThreshold: 20

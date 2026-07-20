@@ -9,6 +9,10 @@ TestCase {
 
     name: "WirelessBatteryDefaults"
 
+    function test_notificationsAreOnByDefault() {
+        compare(WirelessBatteryDefaults.notificationsEnabled, true);
+    }
+
     function test_lowThresholdsWithoutPluginDataAreTheDefaults() {
         const thresholds = WirelessBatteryDefaults.lowThresholds(null);
 

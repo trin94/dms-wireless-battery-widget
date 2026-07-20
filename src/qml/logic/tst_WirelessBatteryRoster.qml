@@ -38,6 +38,8 @@ TestCase {
                 "name": "MX Master 3S",
                 "level": 0.75,
                 "chargeState": WirelessBatteryDevice.ChargeState.Discharging,
+                "timeToEmpty": 7200,
+                "timeToFull": 1800,
                 "live": true
             })];
 
@@ -49,6 +51,8 @@ TestCase {
         compare(roster.devices[0].name, "MX Master 3S");
         compare(roster.devices[0].level, 0.75);
         compare(roster.devices[0].chargeState, WirelessBatteryDevice.ChargeState.Discharging);
+        compare(roster.devices[0].timeToEmpty, 7200);
+        compare(roster.devices[0].timeToFull, 1800);
         compare(roster.devices[0].live, true);
     }
 
@@ -80,10 +84,12 @@ TestCase {
 
         device.level = 0.42;
         device.chargeState = WirelessBatteryDevice.ChargeState.Charging;
+        device.timeToFull = 900;
         wait(0);
 
         compare(roster.devices[0].level, 0.42);
         compare(roster.devices[0].chargeState, WirelessBatteryDevice.ChargeState.Charging);
+        compare(roster.devices[0].timeToFull, 900);
     }
 
     function test_deviceNoLongerLiveIsStaleAtLastReading() {

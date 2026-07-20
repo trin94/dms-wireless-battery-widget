@@ -11,7 +11,7 @@ QtObject {
 
     // One bar entry per device: key, iconName, percentText, showsBolt, tone.
     // Fixed order: mouse, keyboard, controller, headset; name as tiebreak.
-    readonly property var entries: (root.source?.devices ?? []).slice().sort((left, right) => left.deviceClass - right.deviceClass || left.name.localeCompare(right.name) || left.deviceId.localeCompare(right.deviceId)).map(device => {
+    readonly property var entries: WirelessBatteryFixedOrder.sorted(root.source?.devices ?? []).map(device => {
         const percent = Math.round(device.level * 100);
         const charging = device.live && device.chargeState !== WirelessBatteryDevice.ChargeState.Discharging;
         const low = !charging && percent <= (root.lowThresholds[device.deviceClass] ?? -1);

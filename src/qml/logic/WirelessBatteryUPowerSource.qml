@@ -27,6 +27,8 @@ WirelessBatterySource {
             deviceClass: root._deviceClassOf(upowerDevice.type)
             name: upowerDevice.model
             level: upowerDevice.percentage
+            timeToEmpty: upowerDevice.timeToEmpty
+            timeToFull: upowerDevice.timeToFull
             chargeState: {
                 if (upowerDevice.state === UPowerDeviceState.FullyCharged)
                     return WirelessBatteryDevice.ChargeState.FullyCharged;

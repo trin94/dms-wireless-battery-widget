@@ -3,3 +3,4 @@
 # SPDX-License-Identifier: MIT
 
 WirelessBatteryHorizontalPill WirelessBatteryHorizontalPill.qml
+WirelessBatteryPopout WirelessBatteryPopout.qml
