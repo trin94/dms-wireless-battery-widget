@@ -6,6 +6,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 
+import qs.Common
 import qs.Modules.Plugins
 
 import "logic"
@@ -39,6 +40,11 @@ PluginComponent {
         showsThresholdSplit: root.pluginData.notificationsEnabled ?? WirelessBatteryDefaults.notificationsEnabled
     }
 
+    readonly property int _popoutRowHeight: 53
+    readonly property int _popoutEmptyTextHeight: 20
+    // Own edge padding plus the spacingS inset PluginPopout adds around plugin content
+    readonly property real _popoutFramePadding: Theme.spacingM * 2 + Theme.spacingS * 2
+
     horizontalBarPill: Component {
         WirelessBatteryHorizontalPill {
             viewModel: root.viewModel
@@ -67,10 +73,11 @@ PluginComponent {
         }
     }
 
-    readonly property int _popoutRowHeight: 72
-    readonly property int _popoutPadding: 32
-    readonly property int _popoutEmptyHeight: 80
-
     popoutWidth: 340
-    popoutHeight: root.popoutViewModel.rows.length > 0 ? root.popoutViewModel.rows.length * root._popoutRowHeight + root._popoutPadding : root._popoutEmptyHeight
+    popoutHeight: {
+        const rowCount = root.popoutViewModel.rows.length;
+        if (rowCount === 0)
+            return root._popoutFramePadding + root._popoutEmptyTextHeight;
+        return root._popoutFramePadding + rowCount * root._popoutRowHeight + (rowCount - 1) * Theme.spacingL;
+    }
 }

@@ -16,7 +16,8 @@ Column {
 
     required property WirelessBatteryPopoutViewModel viewModel
 
-    spacing: Theme.spacingM
+    padding: Theme.spacingM
+    spacing: Theme.spacingL
 
     component BarSegment: Rectangle {
         id: segment
@@ -52,7 +53,7 @@ Column {
             readonly property color rowTextColor: modelData.stale ? Theme.surfaceTextMedium : Theme.surfaceText
             readonly property color fillColor: WirelessBatteryToneColors.fillForTone(modelData.tone)
 
-            width: parent.width
+            width: root.width - 2 * root.padding
             height: details.implicitHeight
 
             DankIcon {
