@@ -32,32 +32,47 @@ Row {
             id: entry
 
             required property var modelData
+            required property int index
 
             readonly property color entryColor: WirelessBatteryToneColors.forTone(modelData.tone)
 
-            spacing: Theme.spacingXS
-
-            DankIcon {
-                name: entry.modelData.iconName
-                size: root.iconSize
-                color: entry.entryColor
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            DankIcon {
-                name: "bolt"
-                size: root.iconSize
-                color: Theme.primary
-                visible: entry.modelData.showsBolt && root.showBolt
-                anchors.verticalCenter: parent.verticalCenter
-            }
+            spacing: Theme.spacingS
 
             StyledText {
-                text: entry.modelData.percentText
+                text: "•"
                 font.pixelSize: root.textSize
-                color: entry.entryColor
-                visible: root.showPercentage
+                color: Theme.outline
+                opacity: 0.3
+                visible: entry.index > 0
                 anchors.verticalCenter: parent.verticalCenter
+            }
+
+            Row {
+                spacing: Theme.spacingXS
+                anchors.verticalCenter: parent.verticalCenter
+
+                DankIcon {
+                    name: entry.modelData.iconName
+                    size: root.iconSize
+                    color: entry.entryColor
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                DankIcon {
+                    name: "bolt"
+                    size: root.iconSize
+                    color: Theme.primary
+                    visible: entry.modelData.showsBolt && root.showBolt
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                StyledText {
+                    text: entry.modelData.percentText
+                    font.pixelSize: root.textSize
+                    color: entry.entryColor
+                    visible: root.showPercentage
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
     }

@@ -37,6 +37,18 @@ A tracked device is stale while it is shown at its last reading without being li
 are forgotten when the session ends.
 *Avoid*: sleeping, disconnected, offline
 
+**Pill**:
+The widget's face in the bar: a row or column of entries, one per tracked device.
+*Avoid*: applet, indicator, bar widget
+
+**Popout**:
+The panel opened from the pill, showing each tracked device in detail.
+*Avoid*: popup, flyout, dropdown
+
+**Tone**:
+The at-a-glance coloring of a tracked device's entry: normal, low, charging, or stale.
+*Avoid*: status color, severity
+
 **Low Threshold**:
 The per-class percentage at or below which a draining tracked device counts as low, driving the
 low tone in the bar and the desktop notification.
