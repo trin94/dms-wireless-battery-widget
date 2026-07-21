@@ -68,19 +68,19 @@ TestCase {
                 tag: "charging",
                 chargeState: WirelessBatteryDevice.ChargeState.Charging,
                 expectedShowsBolt: true,
-                expectedTone: WirelessBatteryViewModel.Tone.Charging
+                expectedTone: WirelessBatteryTone.Tone.Charging
             },
             {
                 tag: "discharging",
                 chargeState: WirelessBatteryDevice.ChargeState.Discharging,
                 expectedShowsBolt: false,
-                expectedTone: WirelessBatteryViewModel.Tone.Normal
+                expectedTone: WirelessBatteryTone.Tone.Normal
             },
             {
                 tag: "fullyCharged",
                 chargeState: WirelessBatteryDevice.ChargeState.FullyCharged,
                 expectedShowsBolt: true,
-                expectedTone: WirelessBatteryViewModel.Tone.Charging
+                expectedTone: WirelessBatteryTone.Tone.Charging
             }
         ];
     }
@@ -147,28 +147,28 @@ TestCase {
                 level: 0.1,
                 chargeState: WirelessBatteryDevice.ChargeState.Discharging,
                 live: true,
-                expectedTone: WirelessBatteryViewModel.Tone.Low
+                expectedTone: WirelessBatteryTone.Tone.Low
             },
             {
                 tag: "drainingAboveThreshold",
                 level: 0.11,
                 chargeState: WirelessBatteryDevice.ChargeState.Discharging,
                 live: true,
-                expectedTone: WirelessBatteryViewModel.Tone.Normal
+                expectedTone: WirelessBatteryTone.Tone.Normal
             },
             {
                 tag: "lowButCharging",
                 level: 0.1,
                 chargeState: WirelessBatteryDevice.ChargeState.Charging,
                 live: true,
-                expectedTone: WirelessBatteryViewModel.Tone.Charging
+                expectedTone: WirelessBatteryTone.Tone.Charging
             },
             {
                 tag: "lowButStale",
                 level: 0.1,
                 chargeState: WirelessBatteryDevice.ChargeState.Discharging,
                 live: false,
-                expectedTone: WirelessBatteryViewModel.Tone.Stale
+                expectedTone: WirelessBatteryTone.Tone.Stale
             }
         ];
     }
@@ -198,13 +198,13 @@ TestCase {
                 "live": true
             })];
         const viewModel = makeViewModel(source);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Normal);
 
         const thresholds = {};
         thresholds[WirelessBatteryDevice.DeviceClass.Mouse] = 50;
         viewModel.lowThresholds = thresholds;
 
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Low);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Low);
     }
 
     function test_sameClassDevicesGetOwnEntriesOrderedByName() {
@@ -288,11 +288,11 @@ TestCase {
 
         flickeringDevice.live = false;
         compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Stale);
 
         flickeringDevice.live = true;
         compare(viewModel.entries.map(entry => entry.key), ["mouse-a", "mouse-b", "keyboard-1"]);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Normal);
     }
 
     function test_devicesLeavingAndReturningNeverReshuffle() {
@@ -348,9 +348,9 @@ TestCase {
         const viewModel = makeViewModel(source);
 
         compare(viewModel.entries.length, 2);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Normal);
         compare(viewModel.entries[1].key, "mouse-2");
-        compare(viewModel.entries[1].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[1].tone, WirelessBatteryTone.Tone.Stale);
         compare(viewModel.entries[1].percentText, "40%");
         compare(viewModel.entries[1].showsBolt, false);
     }
@@ -380,7 +380,7 @@ TestCase {
 
         device.live = false;
         compare(viewModel.entries.length, 1);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Stale);
         compare(viewModel.entries[0].percentText, "42%");
     }
 
@@ -399,13 +399,13 @@ TestCase {
         verify(roster);
         const viewModel = makeViewModel(roster);
         compare(viewModel.entries.length, 1);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Normal);
         compare(viewModel.entries[0].percentText, "75%");
 
         source.devices = [];
         wait(0);
         compare(viewModel.entries.length, 1);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Stale);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Stale);
         compare(viewModel.entries[0].percentText, "75%");
 
         source.devices = [makeDevice({
@@ -417,7 +417,7 @@ TestCase {
             })];
         wait(0);
         compare(viewModel.entries.length, 1);
-        compare(viewModel.entries[0].tone, WirelessBatteryViewModel.Tone.Normal);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Normal);
         compare(viewModel.entries[0].percentText, "60%");
     }
 

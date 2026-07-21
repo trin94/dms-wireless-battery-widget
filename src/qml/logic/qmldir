@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+singleton WirelessBatteryClassIcon WirelessBatteryClassIcon.qml
 singleton WirelessBatteryDefaults WirelessBatteryDefaults.qml
 WirelessBatteryDevice WirelessBatteryDevice.qml
 singleton WirelessBatteryFixedOrder WirelessBatteryFixedOrder.qml
@@ -11,6 +12,7 @@ WirelessBatteryPopoutViewModel WirelessBatteryPopoutViewModel.qml
 WirelessBatteryRoster WirelessBatteryRoster.qml
 WirelessBatterySettingsStore WirelessBatterySettingsStore.qml
 WirelessBatterySource WirelessBatterySource.qml
+singleton WirelessBatteryTone WirelessBatteryTone.qml
 WirelessBatteryTrackedClassFilter WirelessBatteryTrackedClassFilter.qml
 WirelessBatteryUPowerSource WirelessBatteryUPowerSource.qml
 WirelessBatteryViewModel WirelessBatteryViewModel.qml

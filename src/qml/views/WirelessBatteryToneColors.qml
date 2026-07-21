@@ -13,11 +13,11 @@ import "../logic"
 QtObject {
     function forTone(tone: int): color {
         switch (tone) {
-        case WirelessBatteryViewModel.Tone.Charging:
+        case WirelessBatteryTone.Tone.Charging:
             return Theme.primary;
-        case WirelessBatteryViewModel.Tone.Stale:
+        case WirelessBatteryTone.Tone.Stale:
             return Theme.surfaceTextMedium;
-        case WirelessBatteryViewModel.Tone.Low:
+        case WirelessBatteryTone.Tone.Low:
             return Theme.error;
         default:
             return Theme.surfaceText;
