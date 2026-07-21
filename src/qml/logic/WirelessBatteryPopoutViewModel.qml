@@ -19,9 +19,13 @@ QtObject {
         const chargeStateText = root._chargeStateText(device.chargeState);
         const timeText = stale ? "" : root._timeText(device);
         const thresholdFraction = (root.lowThresholds[device.deviceClass] ?? 0) / 100;
+        const showsSplit = root.showsThresholdSplit && thresholdFraction > 0;
+        const splitFraction = showsSplit ? thresholdFraction : 0;
         return {
             "key": device.deviceId,
             "name": device.name,
+            "iconName": WirelessBatteryClassIcon.forClass(device.deviceClass),
+            "tone": WirelessBatteryTone.forDevice(device, root.lowThresholds),
             "stale": stale,
             "level": device.level,
             "levelText": Math.round(device.level * 100) + "%",
@@ -29,7 +33,10 @@ QtObject {
             "timeText": timeText,
             "detailText": timeText ? chargeStateText + " · " + timeText : chargeStateText,
             "thresholdFraction": thresholdFraction,
-            "showsSplit": root.showsThresholdSplit && thresholdFraction > 0
+            "showsSplit": showsSplit,
+            "splitFraction": splitFraction,
+            "lowSegmentFill": splitFraction > 0 ? Math.min(device.level, splitFraction) / splitFraction : 0,
+            "highSegmentFill": splitFraction < 1 ? Math.max(0, device.level - splitFraction) / (1 - splitFraction) : 0
         };
     })
 

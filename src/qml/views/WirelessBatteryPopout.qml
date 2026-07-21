@@ -18,6 +18,22 @@ Column {
 
     spacing: Theme.spacingM
 
+    component BarSegment: Rectangle {
+        id: segment
+
+        required property real fill
+        required property color fillColor
+
+        radius: height / 2
+
+        Rectangle {
+            width: parent.width * segment.fill
+            height: parent.height
+            radius: parent.radius
+            color: segment.fillColor
+        }
+    }
+
     StyledText {
         text: root.viewModel.emptyText
         font.pixelSize: Theme.fontSizeMedium
@@ -28,72 +44,91 @@ Column {
     Repeater {
         model: root.viewModel.rows
 
-        delegate: Column {
+        delegate: Item {
             id: row
 
             required property var modelData
 
             readonly property color rowTextColor: modelData.stale ? Theme.surfaceTextMedium : Theme.surfaceText
+            readonly property color fillColor: WirelessBatteryToneColors.fillForTone(modelData.tone)
 
             width: parent.width
-            spacing: Theme.spacingXS
+            height: details.implicitHeight
 
-            Item {
-                width: parent.width
-                height: nameText.implicitHeight
+            DankIcon {
+                id: classIcon
 
-                StyledText {
-                    id: nameText
-
-                    text: row.modelData.name
-                    font.pixelSize: Theme.fontSizeMedium
-                    color: row.rowTextColor
-                    elide: Text.ElideRight
-                    anchors.left: parent.left
-                    anchors.right: levelText.left
-                    anchors.rightMargin: Theme.spacingS
-                }
-
-                StyledText {
-                    id: levelText
-
-                    text: row.modelData.levelText
-                    font.pixelSize: Theme.fontSizeMedium
-                    color: row.rowTextColor
-                    anchors.right: parent.right
-                }
+                name: row.modelData.iconName
+                size: Theme.iconSize
+                color: WirelessBatteryToneColors.forTone(row.modelData.tone)
+                anchors.left: parent.left
+                anchors.verticalCenter: parent.verticalCenter
             }
 
-            Item {
-                width: parent.width
-                height: 6
+            Column {
+                id: details
 
-                Rectangle {
-                    anchors.fill: parent
-                    radius: height / 2
-                    color: Theme.surfaceContainerHigh
+                spacing: Theme.spacingXS
+                anchors.left: classIcon.right
+                anchors.leftMargin: Theme.spacingM
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+
+                Item {
+                    width: parent.width
+                    height: nameText.implicitHeight
+
+                    StyledText {
+                        id: nameText
+
+                        text: row.modelData.name
+                        font.pixelSize: Theme.fontSizeMedium
+                        color: row.rowTextColor
+                        elide: Text.ElideRight
+                        anchors.left: parent.left
+                        anchors.right: levelText.left
+                        anchors.rightMargin: Theme.spacingS
+                    }
+
+                    StyledText {
+                        id: levelText
+
+                        text: row.modelData.levelText
+                        font.pixelSize: Theme.fontSizeMedium
+                        color: row.rowTextColor
+                        anchors.right: parent.right
+                    }
                 }
 
-                Rectangle {
-                    width: parent.width * row.modelData.level
-                    height: parent.height
-                    radius: height / 2
-                    color: row.modelData.stale ? Theme.surfaceTextMedium : Theme.primary
+                Item {
+                    width: parent.width
+                    height: 8
+
+                    BarSegment {
+                        id: lowSegment
+
+                        width: Math.max(0, (parent.width - Theme.spacingXS) * row.modelData.splitFraction)
+                        height: parent.height
+                        color: Theme.withAlpha(Theme.error, 0.2)
+                        fill: row.modelData.lowSegmentFill
+                        fillColor: row.fillColor
+                    }
+
+                    BarSegment {
+                        x: lowSegment.width > 0 ? lowSegment.width + Theme.spacingXS : 0
+                        width: Math.max(0, parent.width - x)
+                        height: parent.height
+                        color: Theme.surfaceContainerHigh
+                        fill: row.modelData.highSegmentFill
+                        fillColor: row.fillColor
+                    }
                 }
 
-                Rectangle {
-                    x: parent.width * row.modelData.thresholdFraction - width / 2
-                    width: 2
-                    height: parent.height
-                    color: Theme.error
-                    visible: row.modelData.showsSplit
+                StyledText {
+                    text: row.modelData.detailText
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: row.modelData.stale ? Theme.surfaceTextAlpha : Theme.surfaceTextMedium
                 }
-            }
-
-            StyledText {
-                text: row.modelData.detailText
-                font.pixelSize: Theme.fontSizeSmall
-                color: row.modelData.stale ? Theme.surfaceTextAlpha : Theme.surfaceTextMedium
             }
         }
     }

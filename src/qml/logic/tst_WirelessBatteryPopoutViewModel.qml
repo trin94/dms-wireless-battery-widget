@@ -179,11 +179,15 @@ TestCase {
         compare(viewModel.rows[0].thresholdFraction, 0.1);
         compare(viewModel.rows[1].thresholdFraction, 0.2);
         compare(viewModel.rows[0].showsSplit, true);
+        compare(viewModel.rows[0].splitFraction, 0.1);
+        compare(viewModel.rows[1].splitFraction, 0.2);
 
         viewModel.showsThresholdSplit = false;
 
         compare(viewModel.rows[0].showsSplit, false);
         compare(viewModel.rows[1].showsSplit, false);
+        compare(viewModel.rows[0].splitFraction, 0);
+        compare(viewModel.rows[1].splitFraction, 0);
     }
 
     function test_lowThresholdsFollowSettings() {
@@ -196,6 +200,154 @@ TestCase {
         viewModel.lowThresholds = thresholds;
 
         compare(viewModel.rows[0].thresholdFraction, 0.5);
+    }
+
+    function test_toneFollowsDeviceState_data() {
+        return [
+            {
+                tag: "normal",
+                overrides: {},
+                expectedTone: WirelessBatteryTone.Tone.Normal
+            },
+            {
+                tag: "charging",
+                overrides: {
+                    "chargeState": WirelessBatteryDevice.ChargeState.Charging
+                },
+                expectedTone: WirelessBatteryTone.Tone.Charging
+            },
+            {
+                tag: "stale",
+                overrides: {
+                    "live": false
+                },
+                expectedTone: WirelessBatteryTone.Tone.Stale
+            },
+            {
+                tag: "low",
+                overrides: {
+                    "level": 0.05
+                },
+                expectedTone: WirelessBatteryTone.Tone.Low
+            }
+        ];
+    }
+
+    function test_toneFollowsDeviceState(data) {
+        const roster = makeSource();
+        roster.devices = [makeMouse(data.overrides)];
+
+        const viewModel = makeViewModel(roster);
+
+        compare(viewModel.rows[0].tone, data.expectedTone);
+    }
+
+    function test_iconNameFollowsDeviceClass_data() {
+        return [
+            {
+                tag: "mouse",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Mouse,
+                expectedIconName: "mouse"
+            },
+            {
+                tag: "keyboard",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Keyboard,
+                expectedIconName: "keyboard"
+            },
+            {
+                tag: "controller",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Controller,
+                expectedIconName: "sports_esports"
+            },
+            {
+                tag: "headset",
+                deviceClass: WirelessBatteryDevice.DeviceClass.Headset,
+                expectedIconName: "headset"
+            }
+        ];
+    }
+
+    function test_iconNameFollowsDeviceClass(data) {
+        const roster = makeSource();
+        roster.devices = [makeMouse({
+                "deviceClass": data.deviceClass
+            })];
+
+        const viewModel = makeViewModel(roster);
+
+        compare(viewModel.rows[0].iconName, data.expectedIconName);
+    }
+
+    function test_segmentFills_data() {
+        return [
+            {
+                tag: "levelBelowThreshold",
+                overrides: {
+                    "level": 0.05
+                },
+                expectedLowFill: 0.5,
+                expectedHighFill: 0
+            },
+            {
+                tag: "levelExactlyAtThreshold",
+                overrides: {
+                    "level": 0.1
+                },
+                expectedLowFill: 1,
+                expectedHighFill: 0
+            },
+            {
+                tag: "levelAboveThreshold",
+                overrides: {
+                    "level": 0.55
+                },
+                expectedLowFill: 1,
+                expectedHighFill: 0.5
+            },
+            {
+                tag: "staleRowKeepsFills",
+                overrides: {
+                    "level": 0.55,
+                    "live": false
+                },
+                expectedLowFill: 1,
+                expectedHighFill: 0.5
+            }
+        ];
+    }
+
+    function test_segmentFills(data) {
+        const roster = makeSource();
+        roster.devices = [makeMouse(data.overrides)];
+
+        const viewModel = makeViewModel(roster);
+
+        fuzzyCompare(viewModel.rows[0].lowSegmentFill, data.expectedLowFill, 1e-9);
+        fuzzyCompare(viewModel.rows[0].highSegmentFill, data.expectedHighFill, 1e-9);
+    }
+
+    function test_plainBarFillsWhenSplitIsHidden() {
+        const roster = makeSource();
+        roster.devices = [makeMouse({
+                "level": 0.4
+            })];
+        const viewModel = makeViewModel(roster);
+
+        viewModel.showsThresholdSplit = false;
+
+        compare(viewModel.rows[0].showsSplit, false);
+        compare(viewModel.rows[0].lowSegmentFill, 0);
+        fuzzyCompare(viewModel.rows[0].highSegmentFill, 0.4, 1e-9);
+
+        viewModel.showsThresholdSplit = true;
+        const thresholds = {};
+        thresholds[WirelessBatteryDevice.DeviceClass.Mouse] = 0;
+        viewModel.lowThresholds = thresholds;
+
+        compare(viewModel.rows[0].showsSplit, false);
+        compare(viewModel.rows[0].splitFraction, 0);
+        compare(viewModel.rows[0].lowSegmentFill, 0);
+        fuzzyCompare(viewModel.rows[0].highSegmentFill, 0.4, 1e-9);
     }
 
     function test_staleRowKeepsReadingWithoutEstimate() {
