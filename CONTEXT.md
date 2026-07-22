@@ -42,6 +42,10 @@ are forgotten when the session ends.
 The widget's face in the bar: a row or column of entries, one per tracked device.
 *Avoid*: applet, indicator, bar widget
 
+**Entry**:
+One tracked device's slice of the pill: class icon, bolt slot, and percent.
+*Avoid*: item, cell, row
+
 **Popout**:
 The panel opened from the pill, showing each tracked device in detail.
 *Avoid*: popup, flyout, dropdown
