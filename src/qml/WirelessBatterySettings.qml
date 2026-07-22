@@ -77,6 +77,14 @@ PluginSettings {
         defaultValue: WirelessBatteryDefaults.mouseTracked
     }
 
+    ToggleSetting {
+        settingKey: "mouseRetained"
+        label: I18n.tr("Keep last reading")
+        description: I18n.tr("Show the mouse at its last reading after it stops reporting its battery. When off, it disappears immediately.")
+        defaultValue: WirelessBatteryDefaults.mouseRetained
+        enabled: mouseTrackedToggle.value
+    }
+
     SliderSetting {
         settingKey: "mouseLowThreshold"
         label: I18n.tr("Low threshold")
@@ -108,6 +116,14 @@ PluginSettings {
         settingKey: "keyboardTracked"
         label: I18n.tr("Track keyboard battery")
         defaultValue: WirelessBatteryDefaults.keyboardTracked
+    }
+
+    ToggleSetting {
+        settingKey: "keyboardRetained"
+        label: I18n.tr("Keep last reading")
+        description: I18n.tr("Show the keyboard at its last reading after it stops reporting its battery. When off, it disappears immediately.")
+        defaultValue: WirelessBatteryDefaults.keyboardRetained
+        enabled: keyboardTrackedToggle.value
     }
 
     SliderSetting {
@@ -143,6 +159,14 @@ PluginSettings {
         defaultValue: WirelessBatteryDefaults.controllerTracked
     }
 
+    ToggleSetting {
+        settingKey: "controllerRetained"
+        label: I18n.tr("Keep last reading")
+        description: I18n.tr("Show the controller at its last reading after it stops reporting its battery. When off, it disappears immediately.")
+        defaultValue: WirelessBatteryDefaults.controllerRetained
+        enabled: controllerTrackedToggle.value
+    }
+
     SliderSetting {
         settingKey: "controllerLowThreshold"
         label: I18n.tr("Low threshold")
@@ -174,6 +198,14 @@ PluginSettings {
         settingKey: "headsetTracked"
         label: I18n.tr("Track headset battery")
         defaultValue: WirelessBatteryDefaults.headsetTracked
+    }
+
+    ToggleSetting {
+        settingKey: "headsetRetained"
+        label: I18n.tr("Keep last reading")
+        description: I18n.tr("Show the headset at its last reading after it stops reporting its battery. When off, it disappears immediately.")
+        defaultValue: WirelessBatteryDefaults.headsetRetained
+        enabled: headsetTrackedToggle.value
     }
 
     SliderSetting {

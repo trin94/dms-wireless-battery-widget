@@ -18,14 +18,15 @@ in the bar.
 
 - 🔋 One entry per device in a single bar pill: class icon, percentage, and a bolt while
   charging. The order never reshuffles.
-- 💤 A device that is no longer live stays visible, dimmed at its last reading, until the
-  session ends.
+- 💤 A device of a retained class stays visible when it is no longer live, dimmed at its last
+  reading, until the session ends. Retention is per class and defaults to on for mice and
+  keyboards.
 - 🚨 Low readings turn red, and a desktop notification fires when a device drops to its class's
   low threshold. It re-arms only after the battery recovers past a margin.
 - 🪟 Click the pill for a popout with per-device detail: name, charge state, a level bar split
   at the low threshold, and the time estimate.
-- ⚙️ Settings for tracked classes, per-class low thresholds, notifications, percentage labels,
-  and the charging bolt. Changes apply live.
+- ⚙️ Settings for tracked classes, per-class retention and low thresholds, notifications,
+  percentage labels, and the charging bolt. Changes apply live.
 - ↕️ Renders in horizontal and vertical bars.
 - 🔌 Reads `Quickshell.Services.UPower` directly. No polling.
 
