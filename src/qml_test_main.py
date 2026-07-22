@@ -10,17 +10,25 @@ from pathlib import Path
 from PySide6.QtQuickTest import QUICK_TEST_MAIN
 
 import qml_test_bridge
-import qs_common_fake
 import upower_fake
 
 QML_DIR = Path(__file__).parent / "qml"
+QS_FAKE_DIR = Path(__file__).parent / "qs_fake"
 
 
 def main() -> int:
     upower_fake.register()
-    qs_common_fake.register()
     qml_test_bridge.register()
-    argv = [sys.argv[0], "-platform", "offscreen", "-input", str(QML_DIR), *sys.argv[1:]]
+    argv = [
+        sys.argv[0],
+        "-platform",
+        "offscreen",
+        "-import",
+        str(QS_FAKE_DIR),
+        "-input",
+        str(QML_DIR),
+        *sys.argv[1:],
+    ]
     return QUICK_TEST_MAIN("wireless-battery-widget", argv)
 
 

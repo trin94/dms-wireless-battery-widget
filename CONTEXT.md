@@ -48,9 +48,23 @@ of a retained class go stale. Stale devices are forgotten when the session ends.
 The widget's face in the bar: a row or column of entries, one per tracked device.
 *Avoid*: applet, indicator, bar widget
 
+**Capsule**:
+The pill's outer bounds in the bar; no part of an entry ever shows outside it. It hugs the
+entries while they animate and eases closed only after a leave.
+*Avoid*: frame, outline, background
+
 **Entry**:
 One tracked device's slice of the pill: class icon, bolt slot, and percent.
 *Avoid*: item, cell, row
+
+**Bolt Slot**:
+The space in an entry between class icon and percent that holds the bolt while the device
+charges; closed otherwise.
+*Avoid*: charging icon, bolt gap
+
+**Reveal**:
+A joining entry's grow-in at its sorted position, fading in as it expands.
+*Avoid*: fade-in, pop-in, appear animation
 
 **Popout**:
 The panel opened from the pill, showing each tracked device in detail.

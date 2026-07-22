@@ -26,6 +26,8 @@ Item {
     readonly property int textSize: Theme.barTextSize(barThickness, barConfig?.fontScale, barConfig?.maximizeWidgetText)
 
     property bool _revealArmed: false
+    // Only a leave snap is eased; see ADR 0010.
+    property bool _easeLeave: false
 
     implicitWidth: content.implicitWidth
     implicitHeight: content.implicitHeight
@@ -38,9 +40,12 @@ Item {
     Row {
         id: content
 
+        objectName: "content"
         spacing: Theme.spacingS
 
         move: Transition {
+            enabled: root._easeLeave
+
             NumberAnimation {
                 properties: "x,y"
                 duration: Theme.shortDuration
@@ -49,8 +54,12 @@ Item {
         }
 
         Repeater {
+            objectName: "entries"
             model: WirelessBatteryEntryModel {
-                entries: root.viewModel.entries
+                // The view model can be destroyed before the pill on teardown.
+                entries: root.viewModel?.entries
+
+                onRowsRemoved: root._easeLeave = true
             }
 
             delegate: Row {
@@ -154,9 +163,16 @@ Item {
     }
 
     Behavior on implicitWidth {
+        enabled: root._easeLeave
+
         NumberAnimation {
             duration: Theme.shortDuration
             easing.type: Theme.standardEasing
+
+            onRunningChanged: {
+                if (!running)
+                    root._easeLeave = false;
+            }
         }
     }
 }

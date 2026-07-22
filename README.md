@@ -99,7 +99,8 @@ just mock start  # Show the widget in a mock bar with fake devices for every cla
 ```
 
 `just test` runs the `tst_*.qml` files through Qt Quick Test on a PySide6 engine, with a fake
-UPower service standing in for the real daemon.
+UPower service standing in for the real daemon and QML fakes of the DMS `qs.*` modules
+(`src/qs_fake`) so the pill views render under test.
 
 The product spec lives in
 [issue #1](https://github.com/trin94/dms-wireless-battery-widget/issues/1), the domain glossary

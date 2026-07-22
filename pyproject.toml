@@ -133,7 +133,6 @@ extend-select = [
 known-first-party = [
     "qml_test_bridge",
     "qml_tooling",
-    "qs_common_fake",
     "upower_fake",
     "upower_mock",
     "upower_service",

@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: Elias Mueller
+#
+# SPDX-License-Identifier: MIT
+
+module qs.Common
+singleton I18n 1.0 I18n.qml
+singleton Theme 1.0 Theme.qml
