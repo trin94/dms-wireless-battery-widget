@@ -25,19 +25,21 @@ Row {
 
     spacing: Theme.spacingS
 
-    // The model is the entry count, not the entries list: entries is rebuilt
-    // on every reading change, and a fresh list model would recreate the
-    // delegates and cut the bolt slot animation short.
     Repeater {
-        model: root.viewModel.entries.length
+        model: WirelessBatteryEntryModel {
+            entries: root.viewModel.entries
+        }
 
         delegate: Row {
             id: entry
 
             required property int index
+            required property string iconName
+            required property string percentText
+            required property bool showsBolt
+            required property int tone
 
-            readonly property var entryData: root.viewModel.entries[entry.index]
-            readonly property color entryColor: WirelessBatteryToneColors.forTone(entry.entryData.tone)
+            readonly property color entryColor: WirelessBatteryToneColors.forTone(entry.tone)
 
             spacing: Theme.spacingS
 
@@ -55,14 +57,14 @@ Row {
                 anchors.verticalCenter: parent.verticalCenter
 
                 DankIcon {
-                    name: entry.entryData.iconName
+                    name: entry.iconName
                     size: root.iconSize
                     color: entry.entryColor
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
                 Item {
-                    width: entry.entryData.showsBolt ? Theme.spacingXS + root.iconSize : 0
+                    width: entry.showsBolt ? Theme.spacingXS + root.iconSize : 0
                     height: root.iconSize
                     visible: root.showBolt
                     clip: true
@@ -72,7 +74,7 @@ Row {
                         name: "bolt"
                         size: root.iconSize
                         color: Theme.primary
-                        opacity: entry.entryData.showsBolt ? 1 : 0
+                        opacity: entry.showsBolt ? 1 : 0
                         anchors.left: parent.left
                         anchors.leftMargin: Theme.spacingXS
                         anchors.verticalCenter: parent.verticalCenter
@@ -94,7 +96,7 @@ Row {
                 }
 
                 StyledText {
-                    text: entry.entryData.percentText
+                    text: entry.percentText
                     font.pixelSize: root.textSize
                     color: entry.entryColor
                     leftPadding: Theme.spacingXS

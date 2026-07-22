@@ -25,19 +25,21 @@ Column {
 
     spacing: Theme.spacingS
 
-    // The model is the entry count, not the entries list: entries is rebuilt
-    // on every reading change, and a fresh list model would recreate the
-    // delegates and cut the bolt slot animation short.
     Repeater {
-        model: root.viewModel.entries.length
+        model: WirelessBatteryEntryModel {
+            entries: root.viewModel.entries
+        }
 
         delegate: Column {
             id: entry
 
             required property int index
+            required property string iconName
+            required property string verticalPercentText
+            required property bool showsBolt
+            required property int tone
 
-            readonly property var entryData: root.viewModel.entries[entry.index]
-            readonly property color entryColor: WirelessBatteryToneColors.forTone(entry.entryData.tone)
+            readonly property color entryColor: WirelessBatteryToneColors.forTone(entry.tone)
 
             spacing: Theme.spacingS
             anchors.horizontalCenter: parent.horizontalCenter
@@ -56,7 +58,7 @@ Column {
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 DankIcon {
-                    name: entry.entryData.iconName
+                    name: entry.iconName
                     size: root.iconSize
                     color: entry.entryColor
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -64,7 +66,7 @@ Column {
 
                 Item {
                     width: root.iconSize
-                    height: entry.entryData.showsBolt ? Theme.spacingXS + root.iconSize : 0
+                    height: entry.showsBolt ? Theme.spacingXS + root.iconSize : 0
                     visible: root.showBolt
                     clip: true
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -73,7 +75,7 @@ Column {
                         name: "bolt"
                         size: root.iconSize
                         color: Theme.primary
-                        opacity: entry.entryData.showsBolt ? 1 : 0
+                        opacity: entry.showsBolt ? 1 : 0
                         anchors.top: parent.top
                         anchors.topMargin: Theme.spacingXS
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -95,7 +97,7 @@ Column {
                 }
 
                 StyledText {
-                    text: entry.entryData.verticalPercentText
+                    text: entry.verticalPercentText
                     font.pixelSize: root.textSize
                     color: entry.entryColor
                     topPadding: Theme.spacingXS
