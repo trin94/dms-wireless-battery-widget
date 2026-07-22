@@ -29,7 +29,8 @@ A device's battery level and charge state as reported by a source at a moment in
 *Avoid*: measurement, sample
 
 **Live**:
-A tracked device is live while a source is currently reporting its battery.
+A tracked device is live while a source is currently reporting its battery. A reported level
+is enough; a device whose charge state is unknown is still live.
 *Avoid*: reporting, online, connected
 
 **Stale**:

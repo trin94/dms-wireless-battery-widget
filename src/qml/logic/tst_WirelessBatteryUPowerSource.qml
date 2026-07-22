@@ -133,9 +133,21 @@ TestCase {
     function test_liveness_data() {
         return [
             {
-                tag: "unknownState",
+                tag: "reportedReading",
+                overrides: {},
+                expectedLive: true
+            },
+            {
+                tag: "notReady",
                 overrides: {
-                    "state": UPowerDeviceState.Unknown
+                    "ready": false
+                },
+                expectedLive: false
+            },
+            {
+                tag: "notPresent",
+                overrides: {
+                    "isPresent": false
                 },
                 expectedLive: false
             },
@@ -147,15 +159,10 @@ TestCase {
                 expectedLive: false
             },
             {
-                tag: "notReady",
+                tag: "unknownChargeState",
                 overrides: {
-                    "ready": false
+                    "state": UPowerDeviceState.Unknown
                 },
-                expectedLive: false
-            },
-            {
-                tag: "reportedReading",
-                overrides: {},
                 expectedLive: true
             }
         ];
@@ -207,6 +214,11 @@ TestCase {
             {
                 tag: "discharging",
                 state: UPowerDeviceState.Discharging,
+                expected: WirelessBatteryDevice.ChargeState.Discharging
+            },
+            {
+                tag: "unknown",
+                state: UPowerDeviceState.Unknown,
                 expected: WirelessBatteryDevice.ChargeState.Discharging
             }
         ];

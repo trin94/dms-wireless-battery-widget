@@ -36,7 +36,7 @@ WirelessBatterySource {
                     return WirelessBatteryDevice.ChargeState.Charging;
                 return WirelessBatteryDevice.ChargeState.Discharging;
             }
-            live: upowerDevice.ready && upowerDevice.state !== UPowerDeviceState.Unknown && upowerDevice.percentage > 0
+            live: upowerDevice.ready && upowerDevice.isPresent && upowerDevice.percentage > 0
         }
     }
 
