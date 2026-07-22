@@ -20,10 +20,17 @@ PluginComponent {
         source: root.source
     }
 
+    readonly property var _retainedClasses: WirelessBatteryDefaults.retainedClasses(root.pluginData)
+
+    readonly property WirelessBatterySource retainedRoster: WirelessBatteryRetainedClassFilter {
+        source: root.roster
+        retainedClasses: root._retainedClasses
+    }
+
     readonly property var _trackedClasses: WirelessBatteryDefaults.trackedClasses(root.pluginData)
 
     readonly property WirelessBatterySource trackedRoster: WirelessBatteryTrackedClassFilter {
-        source: root.roster
+        source: root.retainedRoster
         trackedClasses: root._trackedClasses
     }
 

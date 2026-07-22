@@ -20,6 +20,12 @@ The kind of tracked device — mouse, keyboard, controller, or headset. An attri
 that drives its icon and visibility toggles, never identity or grouping.
 *Avoid*: device type, category
 
+**Retained Class**:
+A tracked class whose devices remain shown as stale entries when they stop being live. Devices
+of a non-retained class vanish the moment they are not live; they reappear at their last reading
+if the class becomes retained again during the session.
+*Avoid*: sticky, persistent, lingering, keep-on-disconnect
+
 **Source**:
 A backend that discovers devices and reports their battery. UPower is the only source at ship.
 *Avoid*: provider, backend, adapter
@@ -34,8 +40,8 @@ is enough; a device whose charge state is unknown is still live.
 *Avoid*: reporting, online, connected
 
 **Stale**:
-A tracked device is stale while it is shown at its last reading without being live. Stale devices
-are forgotten when the session ends.
+A tracked device is stale while it is shown at its last reading without being live. Only devices
+of a retained class go stale. Stale devices are forgotten when the session ends.
 *Avoid*: sleeping, disconnected, offline
 
 **Pill**:

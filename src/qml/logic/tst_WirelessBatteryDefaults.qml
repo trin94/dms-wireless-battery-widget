@@ -49,6 +49,27 @@ TestCase {
         compare(tracked[WirelessBatteryDevice.DeviceClass.Mouse], true);
     }
 
+    function test_onlyMouseAndKeyboardAreRetainedByDefault() {
+        const retained = WirelessBatteryDefaults.retainedClasses(null);
+
+        compare(retained[WirelessBatteryDevice.DeviceClass.Mouse], true);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Keyboard], true);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Controller], false);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Headset], false);
+    }
+
+    function test_pluginDataOverridesRetainedClasses() {
+        const retained = WirelessBatteryDefaults.retainedClasses({
+            "headsetRetained": true,
+            "mouseRetained": false
+        });
+
+        compare(retained[WirelessBatteryDevice.DeviceClass.Headset], true);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Mouse], false);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Keyboard], true);
+        compare(retained[WirelessBatteryDevice.DeviceClass.Controller], false);
+    }
+
     function test_barDisplayTogglesAreOnByDefault() {
         compare(WirelessBatteryDefaults.showPercentage, true);
         compare(WirelessBatteryDefaults.showBolt, true);
