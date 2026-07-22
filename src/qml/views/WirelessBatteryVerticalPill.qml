@@ -42,9 +42,9 @@ Column {
             spacing: Theme.spacingS
             anchors.horizontalCenter: parent.horizontalCenter
 
-            Rectangle {
-                width: root.iconSize
-                height: 1
+            StyledText {
+                text: "•"
+                font.pixelSize: root.textSize
                 color: Theme.outline
                 opacity: 0.3
                 visible: entry.index > 0
