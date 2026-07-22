@@ -27,3 +27,15 @@ path = "docs/preview.webp"
 precedence = "aggregate"
 SPDX-FileCopyrightText = "Elias Mueller"
 SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ".agents/skills/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Matt Pocock"
+SPDX-License-Identifier = "MIT"
+
+[[annotations]]
+path = ["docs/agents/*.md", "skills-lock.json"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Elias Mueller"
+SPDX-License-Identifier = "MIT"
