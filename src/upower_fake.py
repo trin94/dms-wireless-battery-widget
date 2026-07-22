@@ -77,6 +77,7 @@ class UPowerDevice(QObject):
     timeToEmptyChanged = Signal(float)
     timeToFullChanged = Signal(float)
     readyChanged = Signal(bool)
+    isPresentChanged = Signal(bool)
 
     def __init__(self, parent: QObject | None = None) -> None:
         super().__init__(parent)
@@ -88,6 +89,7 @@ class UPowerDevice(QObject):
         self._time_to_empty = 0.0
         self._time_to_full = 0.0
         self._ready = True
+        self._is_present = True
 
     @Property(int, notify=typeChanged)
     def type(self) -> int:
@@ -168,6 +170,16 @@ class UPowerDevice(QObject):
         if self._ready != value:
             self._ready = value
             self.readyChanged.emit(value)
+
+    @Property(bool, notify=isPresentChanged)
+    def isPresent(self) -> bool:
+        return self._is_present
+
+    @isPresent.setter
+    def isPresent(self, value: bool) -> None:
+        if self._is_present != value:
+            self._is_present = value
+            self.isPresentChanged.emit(value)
 
 
 class FakeDeviceModel(QObject):

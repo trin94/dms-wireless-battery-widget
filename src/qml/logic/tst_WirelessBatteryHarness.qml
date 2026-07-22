@@ -32,4 +32,31 @@ TestCase {
         testCase.bridge.remove(device);
         compare(UPower.devices.values.length, 0);
     }
+
+    function test_fakeDevicePresenceIsOverridablePerDevice() {
+        const device = testCase.bridge.addDevice({});
+        const sibling = testCase.bridge.addDevice({});
+        const spy = createTemporaryObject(presenceSpyComponent, testCase, {
+            "target": device
+        });
+        testCase.bridge.update(device, {
+            "isPresent": false
+        });
+        compare(device.isPresent, false);
+        compare(spy.count, 1);
+        compare(sibling.isPresent, true);
+    }
+
+    function test_fakeDeviceIsPresentByDefault() {
+        const device = testCase.bridge.addDevice({});
+        compare(device.isPresent, true);
+    }
+
+    Component {
+        id: presenceSpyComponent
+
+        SignalSpy {
+            signalName: "isPresentChanged"
+        }
+    }
 }
