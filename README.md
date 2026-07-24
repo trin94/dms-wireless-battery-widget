@@ -16,19 +16,11 @@ in the bar.
 
 ![Preview](docs/preview.webp)
 
-- 🔋 One entry per device in a single bar pill: class icon, percentage, and a bolt while
-  charging. The order never reshuffles.
-- 💤 A device of a retained class stays visible when it is no longer live, dimmed at its last
-  reading, until the session ends. Retention is per class and defaults to on for mice and
-  keyboards.
-- 🚨 Low readings turn red, and a desktop notification fires when a device drops to its class's
-  low threshold. It re-arms only after the battery recovers past a margin.
-- 🪟 Click the pill for a popout with per-device detail: name, charge state, a level bar split
-  at the low threshold, and the time estimate.
-- 🫥 While no device is shown, for example right after boot before a mouse wakes, the pill
-  shows a muted placeholder. Optionally it hides entirely instead.
-- ⚙️ Settings for tracked classes, per-class retention and low thresholds, notifications,
-  percentage labels, the charging bolt, and the placeholder. Changes apply live.
+- 🔋 One entry per device in a single bar pill: class icon, percentage, and a bolt while charging.
+- 💤 A device of a retained class stays visible when no longer live, dimmed at its last reading, until the session ends.
+- 🚨 Low readings turn red, and a desktop notification fires when a device drops to its class's low threshold.
+- 🪟 Click the pill for a popout with per-device detail.
+- ⚙️ Settings for tracked classes, retention, low thresholds, notifications, and appearance. Changes apply live.
 - ↕️ Renders in horizontal and vertical bars.
 - 🔌 Reads `Quickshell.Services.UPower` directly. No polling.
 
@@ -43,11 +35,7 @@ for d in $(upower -e); do
 done
 ```
 
-Every device the loop prints gets its own entry in the pill. If a device is missing, its driver
-does not expose the battery to UPower and the widget cannot see it.
-
-The plugin also checks itself at startup: if your DMS or Quickshell installation is too old,
-enabling fails and a toast says what went wrong.
+If a device is missing from the output, its driver does not expose the battery to UPower and the widget cannot see it.
 
 ## Installation
 
