@@ -129,12 +129,19 @@ class Update:
 Step = Delay | Connected | Update
 
 PRESETS: dict[str, list[Step]] = {
+    "cold-boot": [
+        Update("mouse", state=State.UNKNOWN, percentage=0),
+        Update("keyboard", state=State.UNKNOWN, percentage=0),
+        Update("controller", state=State.UNKNOWN, percentage=0),
+        Update("headset", state=State.UNKNOWN, percentage=0),
+        Update("mouse2", state=State.UNKNOWN, percentage=0),
+    ],
     "fresh-login": [
         Update("mouse", state=State.UNKNOWN, percentage=0),
         Update("keyboard", state=State.UNKNOWN, percentage=0),
         Update("controller", state=State.UNKNOWN, percentage=0),
         Update("headset", state=State.UNKNOWN, percentage=0),
-        Delay(1.0),
+        Delay(2.0),
         Update("mouse", state=State.DISCHARGING, percentage=75),
         Delay(0.4),
         Update("keyboard", state=State.DISCHARGING, percentage=60),
@@ -199,12 +206,16 @@ class MockDevice:
         self._mock = mock
         self._handle = handle
         self._props = dict(props)
+        self._boot_reading = {key: props[key] for key in ("State", "Percentage")}
         self._path: str | None = mock.add_device(handle, **self._props)
 
     def update(self, **props: object) -> None:
         self._props.update(props)
         if self._path is not None:
             self._mock.update_device(self._path, **props)
+
+    def wake(self) -> None:
+        self.update(**self._boot_reading)
 
     def set_connected(self, connected: bool) -> None:
         if connected and self._path is None:
@@ -238,6 +249,10 @@ class MockControlService(ServiceInterface):
             message = f"unknown state: {state}, valid: {', '.join(STATES)}"
             raise DBusError(ERROR_NAME, message)
         self._device(device).update(State=number)
+
+    @method()
+    def Wake(self, device: "s"):
+        self._device(device).wake()
 
     @method()
     def SetConnected(self, device: "s", connected: "b"):

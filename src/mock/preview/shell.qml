@@ -73,8 +73,14 @@ ShellRoot {
         }
 
         function popout(): string {
-            widget.triggerPopout();
+            widgetLoader.item.triggerPopout();
             return "popout toggled";
+        }
+
+        function reset(): string {
+            widgetLoader.active = false;
+            widgetLoader.active = true;
+            return "widget reset";
         }
     }
 
@@ -82,7 +88,8 @@ ShellRoot {
         target: mockPluginService
 
         function onPluginDataChanged(changedPluginId: string) {
-            widget.pluginData = mockPluginService.data[changedPluginId] ?? {};
+            if (widgetLoader.item)
+                widgetLoader.item.pluginData = mockPluginService.data[changedPluginId] ?? {};
         }
     }
 
@@ -95,18 +102,26 @@ ShellRoot {
             right: !root.verticalBar
             bottom: true
         }
-        implicitWidth: widget.barThickness
-        implicitHeight: widget.barThickness
+        readonly property real barThickness: widgetLoader.item?.barThickness ?? 48
+
+        implicitWidth: barThickness
+        implicitHeight: barThickness
         color: Theme.surfaceContainer
 
-        WirelessBatteryWidget {
-            id: widget
-            parentScreen: bar.screen
-            axis: root.verticalBar ? ({
-                    "isVertical": true,
-                    "edge": "left"
-                }) : null
+        Loader {
+            id: widgetLoader
+
             anchors.centerIn: parent
+
+            sourceComponent: WirelessBatteryWidget {
+                parentScreen: bar.screen
+                axis: root.verticalBar ? ({
+                        "isVertical": true,
+                        "edge": "left"
+                    }) : null
+            }
+
+            onLoaded: item.pluginData = mockPluginService.data[root.pluginId] ?? {}
         }
     }
 

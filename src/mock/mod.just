@@ -25,6 +25,13 @@ start: _links
     setsid --fork sh -c 'exec uv run "{{ SERVE }}" >"{{ LOG }}" 2>&1'
     echo 'mock bar started, log: {{ LOG }}'
 
+# Replay a cold boot: zero every reading, then forget the session
+[group('bar')]
+cold:
+    #!/usr/bin/env sh
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} RunPreset s cold-boot >/dev/null || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+    qs -p '{{ PREVIEW }}' ipc call bar reset || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
+
 # Stop the mock bar
 [group('bar')]
 stop:
@@ -49,6 +56,11 @@ devices:
     reply=$(busctl --user call {{ CONTROL }} / {{ CONTROL }} ListDevices) || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
     reply=${reply#'s "'}
     printf '%b\n' "${reply%'"'}"
+
+# Wake a mock device with its first reading (pairs with `cold`)
+[group('device')]
+@wake device:
+    busctl --user call {{ CONTROL }} / {{ CONTROL }} Wake s {{ device }} || { echo 'hint: start the mock bar with `just mock start`'; exit 1; }
 
 # Plug a mock device back in
 [group('device')]
