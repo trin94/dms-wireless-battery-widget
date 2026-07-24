@@ -73,5 +73,6 @@ TestCase {
     function test_barDisplayTogglesAreOnByDefault() {
         compare(WirelessBatteryDefaults.showPercentage, true);
         compare(WirelessBatteryDefaults.showBolt, true);
+        compare(WirelessBatteryDefaults.showPlaceholder, true);
     }
 }

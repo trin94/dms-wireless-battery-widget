@@ -25,8 +25,10 @@ in the bar.
   low threshold. It re-arms only after the battery recovers past a margin.
 - 🪟 Click the pill for a popout with per-device detail: name, charge state, a level bar split
   at the low threshold, and the time estimate.
+- 🫥 While no device is shown, for example right after boot before a mouse wakes, the pill
+  shows a muted placeholder. Optionally it hides entirely instead.
 - ⚙️ Settings for tracked classes, per-class retention and low thresholds, notifications,
-  percentage labels, and the charging bolt. Changes apply live.
+  percentage labels, the charging bolt, and the placeholder. Changes apply live.
 - ↕️ Renders in horizontal and vertical bars.
 - 🔌 Reads `Quickshell.Services.UPower` directly. No polling.
 

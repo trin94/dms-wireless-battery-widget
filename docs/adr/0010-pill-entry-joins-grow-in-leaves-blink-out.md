@@ -17,6 +17,9 @@ at the trailing edge, gaps that squeeze and wobble. The Behavior also forces a w
 around the positioner: a Behavior on a positioner's own implicit size never fires, because the
 positioner writes it internally from C++ and bypasses property interceptors. Initial population renders without
 animation: delegates created while the view instantiates complete before the root arms the
-reveal. There is no user-facing
+reveal. A leave that lands in the same model sync as a join — the placeholder swap is the
+common case — does not arm the ease: the join's reveal already animates the content, and an
+armed ease would make the capsule trail the reveal and clip the joining entry, so the sync's
+insert disarms what its removal armed. There is no user-facing
 setting; the pill uses the bar's standard motion (shortDuration, standardEasing) so entry
 changes match the bolt slot. Per ADR 0007 the animation lands twice, once per pill view.

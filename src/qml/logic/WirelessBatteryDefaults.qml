@@ -26,6 +26,7 @@ QtObject {
     readonly property bool headsetRetained: false
     readonly property bool showPercentage: true
     readonly property bool showBolt: true
+    readonly property bool showPlaceholder: true
 
     function lowThresholds(pluginData: var): var {
         const data = pluginData ?? {};

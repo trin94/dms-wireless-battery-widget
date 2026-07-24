@@ -37,6 +37,7 @@ PluginComponent {
     readonly property WirelessBatteryViewModel viewModel: WirelessBatteryViewModel {
         source: root.trackedRoster
         lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
+        showsPlaceholder: root.pluginData.showPlaceholder ?? WirelessBatteryDefaults.showPlaceholder
     }
 
     readonly property WirelessBatteryPopoutViewModel popoutViewModel: WirelessBatteryPopoutViewModel {
@@ -45,6 +46,10 @@ PluginComponent {
         lowThresholds: WirelessBatteryDefaults.lowThresholds(root.pluginData)
         showsThresholdSplit: root.pluginData.notificationsEnabled ?? WirelessBatteryDefaults.notificationsEnabled
     }
+
+    // With the placeholder disabled the pill has nothing to show while the
+    // roster is empty, so the whole capsule hides.
+    readonly property bool _pillPopulated: root.viewModel.entries.length > 0
 
     horizontalBarPill: Component {
         WirelessBatteryHorizontalPill {
@@ -75,4 +80,8 @@ PluginComponent {
     }
 
     popoutWidth: 340
+
+    on_PillPopulatedChanged: root.setVisibilityOverride(root._pillPopulated)
+
+    Component.onCompleted: root.setVisibilityOverride(root._pillPopulated)
 }

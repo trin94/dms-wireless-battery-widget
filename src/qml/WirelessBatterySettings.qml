@@ -34,6 +34,13 @@ PluginSettings {
         defaultValue: WirelessBatteryDefaults.showBolt
     }
 
+    ToggleSetting {
+        settingKey: "showPlaceholder"
+        label: I18n.tr("Show placeholder when no device is shown")
+        description: I18n.tr("While no tracked device is live or kept at its last reading, show a muted icon instead of hiding the pill")
+        defaultValue: WirelessBatteryDefaults.showPlaceholder
+    }
+
     Rectangle {
         width: parent.width
         height: 1

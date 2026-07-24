@@ -30,6 +30,47 @@ TestCase {
         return viewModel;
     }
 
+    function test_emptySourceShowsThePlaceholder() {
+        const source = makeSource();
+
+        const viewModel = makeViewModel(source);
+
+        compare(viewModel.entries.length, 1);
+        compare(viewModel.entries[0].key, "placeholder");
+        compare(viewModel.entries[0].iconName, "battery_unknown");
+        compare(viewModel.entries[0].percentText, "");
+        compare(viewModel.entries[0].verticalPercentText, "");
+        compare(viewModel.entries[0].showsPercent, false);
+        compare(viewModel.entries[0].showsBolt, false);
+        compare(viewModel.entries[0].tone, WirelessBatteryTone.Tone.Stale);
+    }
+
+    function test_placeholderYieldsToTheFirstEntry() {
+        const source = makeSource();
+        const viewModel = makeViewModel(source);
+        compare(viewModel.entries.map(entry => entry.key), ["placeholder"]);
+
+        source.devices = [makeDevice({
+                "deviceId": "mouse-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+                "level": 0.56,
+                "live": true
+            })];
+        compare(viewModel.entries.map(entry => entry.key), ["mouse-1"]);
+
+        source.devices = [];
+        compare(viewModel.entries.map(entry => entry.key), ["placeholder"]);
+    }
+
+    function test_disabledPlaceholderLeavesTheEntriesEmpty() {
+        const source = makeSource();
+        const viewModel = makeViewModel(source);
+
+        viewModel.showsPlaceholder = false;
+
+        compare(viewModel.entries.length, 0);
+    }
+
     function test_liveMouseBecomesEntryWithIconAndPercentage() {
         const source = makeSource();
         source.devices = [makeDevice({
@@ -45,6 +86,7 @@ TestCase {
         compare(viewModel.entries.length, 1);
         compare(viewModel.entries[0].iconName, "mouse");
         compare(viewModel.entries[0].percentText, "75%");
+        compare(viewModel.entries[0].showsPercent, true);
     }
 
     function test_verticalPercentTextIsTheBareNumber() {

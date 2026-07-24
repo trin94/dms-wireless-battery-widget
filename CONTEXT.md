@@ -45,7 +45,8 @@ of a retained class go stale. Stale devices are forgotten when the session ends.
 *Avoid*: sleeping, disconnected, offline
 
 **Pill**:
-The widget's face in the bar: a row or column of entries, one per tracked device.
+The widget's face in the bar: a row or column of entries, one per tracked device, or the
+placeholder when there is none.
 *Avoid*: applet, indicator, bar widget
 
 **Capsule**:
@@ -61,6 +62,11 @@ One tracked device's slice of the pill: class icon, bolt slot, and percent.
 The space in an entry between class icon and percent that holds the bolt while the device
 charges; closed otherwise.
 *Avoid*: charging icon, bolt gap
+
+**Placeholder**:
+The pill's only slice while no tracked device is shown: a single muted mark signaling the
+plugin runs with nothing to report. The user may hide the pill in that state instead.
+*Avoid*: empty state, idle icon, dummy entry
 
 **Reveal**:
 A joining entry's grow-in at its sorted position, fading in as it expands.

@@ -60,6 +60,7 @@ Item {
                 entries: root.viewModel?.entries
 
                 onRowsRemoved: root._easeLeave = true
+                onRowsInserted: root._easeLeave = false
             }
 
             delegate: Row {
@@ -68,6 +69,7 @@ Item {
                 required property int index
                 required property string iconName
                 required property string percentText
+                required property bool showsPercent
                 required property bool showsBolt
                 required property int tone
 
@@ -154,7 +156,7 @@ Item {
                         font.pixelSize: root.textSize
                         color: entry.entryColor
                         leftPadding: Theme.spacingXS
-                        visible: root.showPercentage
+                        visible: root.showPercentage && entry.showsPercent
                         anchors.verticalCenter: parent.verticalCenter
                     }
                 }

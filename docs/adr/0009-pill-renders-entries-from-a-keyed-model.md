@@ -12,4 +12,6 @@ a join or leave touches only that entry's row, a reading change updates roles wi
 structural change, and the delegates of surviving entries are never recreated. The diff-sync is
 a pure logic component with its own tests; per ADR 0007 the model wiring appears in both pill
 views. Rendering is unchanged — the delegates read the same values through roles instead of
-indexing into the entries array.
+indexing into the entries array. The placeholder rides the same model under the reserved key
+`placeholder`, so keys identify rows, not devices, and the join and leave choreography applies
+to the placeholder unchanged.

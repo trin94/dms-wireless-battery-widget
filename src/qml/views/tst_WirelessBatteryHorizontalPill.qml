@@ -60,6 +60,31 @@ TestCase {
         return maxOverflow;
     }
 
+    function test_placeholderIsABareIcon() {
+        const pill = makePill([]);
+
+        const entries = findChild(pill, "entries");
+        compare(entries.count, 1);
+        compare(pill.implicitWidth, pill.iconSize);
+    }
+
+    function test_entryIsWiderThanTheBareIcon() {
+        const pill = makePill([makeDevice("mouse-1")]);
+
+        verify(pill.implicitWidth > pill.iconSize, "percent text never widened the entry");
+    }
+
+    function test_placeholderSwapKeepsTheEntryInsideTheCapsule() {
+        const pill = makePill([]);
+
+        pill.viewModel.source.devices = [makeDevice("mouse-1")];
+
+        const overflow = maxContentOverflow(pill, 500);
+        compare(findChild(pill, "entries").count, 1);
+        verify(pill.width > pill.iconSize + 1, "joining entry never grew in");
+        verify(overflow <= 1, "content overflowed the capsule by " + overflow.toFixed(1) + "px during the placeholder swap");
+    }
+
     function test_boltRevealKeepsEntriesInsideTheCapsule() {
         const mouse = makeDevice("mouse-1");
         const pill = makePill([mouse]);
