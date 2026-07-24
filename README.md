@@ -14,7 +14,9 @@ A [Dank Material Shell](https://github.com/AvengeMedia/DankMaterialShell) plugin
 battery levels of your wireless peripherals (mice, keyboards, game controllers, and headsets)
 in the bar.
 
-> 🤖 AI agents wrote this plugin entirely, with a human orchestrating the agents.
+> [!IMPORTANT]
+> 🤖 AI agents wrote this plugin entirely, with a human orchestrating the agents
+> using skills from the [AI Hero skills catalog](https://www.aihero.dev/skills-catalog).
 
 ![Preview](docs/preview.webp)
 
@@ -59,10 +61,13 @@ ln -s "$PWD/dms-wireless-battery-widget" ~/.config/DankMaterialShell/plugins/dms
 
 Then add the widget to the bar from [the plugin settings](https://danklinux.com/docs/dankmaterialshell/plugin-development#5-load-it).
 
+## Roadmap
+
+- Steam Controller support.
+- Devices whose batteries UPower does not report.
+
 ## Alternatives
 
-- [mouse-battery-widget](https://github.com/trin94/mouse-battery-widget) is this plugin's
-  predecessor. It shows a single mouse and nothing else; this plugin replaces it.
 - [dms-mouse-battery](https://github.com/Ripolin99/dms-mouse-battery) also shows the mouse
   battery in DMS and adds DPI preset switching via Solaar or ratbagctl.
 
