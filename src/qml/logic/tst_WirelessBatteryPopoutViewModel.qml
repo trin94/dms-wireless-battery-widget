@@ -379,8 +379,8 @@ TestCase {
                 "live": false
             })];
 
-        compare(viewModel.emptyState, WirelessBatteryPopoutViewModel.EmptyState.WaitingForKnownDevice);
-        compare(viewModel.emptyText, "Waiting for a known device");
+        compare(viewModel.emptyState, WirelessBatteryPopoutViewModel.EmptyState.NoReadingYet);
+        compare(viewModel.emptyText, "No battery reported yet");
     }
 
     function test_rowsClearTheEmptyState() {

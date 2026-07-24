@@ -44,14 +44,14 @@ QtObject {
         if (root.rows.length > 0)
             return WirelessBatteryPopoutViewModel.EmptyState.None;
         if ((root.source?.devices ?? []).length > 0)
-            return WirelessBatteryPopoutViewModel.EmptyState.WaitingForKnownDevice;
+            return WirelessBatteryPopoutViewModel.EmptyState.NoReadingYet;
         return WirelessBatteryPopoutViewModel.EmptyState.NoSupportedDevice;
     }
 
     readonly property string emptyText: {
         switch (root.emptyState) {
-        case WirelessBatteryPopoutViewModel.EmptyState.WaitingForKnownDevice:
-            return I18n.tr("Waiting for a known device");
+        case WirelessBatteryPopoutViewModel.EmptyState.NoReadingYet:
+            return I18n.tr("No battery reported yet");
         case WirelessBatteryPopoutViewModel.EmptyState.NoSupportedDevice:
             return I18n.tr("No supported device present");
         default:
@@ -64,7 +64,7 @@ QtObject {
 
     enum EmptyState {
         None,
-        WaitingForKnownDevice,
+        NoReadingYet,
         NoSupportedDevice
     }
 
