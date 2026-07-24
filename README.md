@@ -14,6 +14,8 @@ A [Dank Material Shell](https://github.com/AvengeMedia/DankMaterialShell) plugin
 battery levels of your wireless peripherals (mice, keyboards, game controllers, and headsets)
 in the bar.
 
+> 🤖 AI agents wrote this plugin entirely, with a human orchestrating the agents.
+
 ![Preview](docs/preview.webp)
 
 - 🔋 One entry per device in a single bar pill: class icon, percentage, and a bolt while charging.
