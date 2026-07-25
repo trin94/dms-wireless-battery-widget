@@ -94,6 +94,12 @@ TestCase {
         source.consumeLine("");
         source.consumeLine("not json");
         source.consumeLine("{\"event\": \"battery\", \"level\": 50, \"state\": \"discharging\"}");
+        testCase.feed(source, {
+            "event": "battery",
+            "state": "discharging",
+            "serial": "FXB995480177F",
+            "slot": 0
+        });
 
         compare(source.devices.length, 0);
     }
