@@ -265,6 +265,44 @@ TestCase {
         verify(source.devices[1].live);
     }
 
+    function test_withdrawForgetsEveryController() {
+        const source = makeSource();
+        const spy = makeWithdrawnSpy(source);
+        testCase.feedBattery(source);
+        testCase.feedBattery(source, {
+            "slot": 1
+        });
+
+        source.withdraw();
+
+        compare(source.devices.length, 0);
+        compare(spy.count, 1);
+        compare(spy.signalArguments[0][0], ["steam-controller:FXB995480177F:0", "steam-controller:FXB995480177F:1"]);
+    }
+
+    function test_withdrawWithoutDevicesStaysSilent() {
+        const source = makeSource();
+        const spy = makeWithdrawnSpy(source);
+
+        source.withdraw();
+
+        compare(spy.count, 0);
+    }
+
+    function test_freshReadingAfterWithdrawCreatesTheDeviceAnew() {
+        const source = makeSource();
+        testCase.feedBattery(source);
+        source.withdraw();
+
+        testCase.feedBattery(source, {
+            "level": 42
+        });
+
+        compare(source.devices.length, 1);
+        compare(source.devices[0].level, 0.42);
+        verify(source.devices[0].live);
+    }
+
     function test_helperCommandRunsTheHelperWithPython() {
         const source = makeSource();
 
