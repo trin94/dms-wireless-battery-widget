@@ -9,5 +9,5 @@ QtObject {
 
     // A backing source was removed for good; carries the device ids it
     // reported so session memory downstream forgets them.
-    signal sourceRemoved(deviceIds: list<string>)
+    signal devicesWithdrawn(deviceIds: list<string>)
 }
