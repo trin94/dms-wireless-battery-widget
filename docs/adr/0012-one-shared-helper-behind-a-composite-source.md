@@ -12,6 +12,9 @@ unaware of the change, as ADR 0003 and 0005 intend. Disabling the toggle stops t
 withdraws the source's devices, which the roster forgets per ADR 0008's scope. We rejected one
 helper per component because several bars would each spawn a process for the same read-only
 hidraw nodes, and a daemon-only source because plugin components share nothing but the QML
-engine, leaving no channel to hand devices to the widgets. The cost we accept: singleton state
+engine, leaving no channel to hand devices to the widgets. We also rejected merging below QML
+by feeding the controller into UPower itself: stock UPower has no API for userland devices, so
+every route in — a kernel module, a uhid ghost device, or proxying the whole system bus — is a
+privileged component larger than the merge plumbing it would delete. The cost we accept: singleton state
 is shared engine-wide, so the process shell stays a thin, untested wrapper around the tested
 line-consumer source.
