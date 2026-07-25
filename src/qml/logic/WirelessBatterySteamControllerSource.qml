@@ -61,6 +61,17 @@ WirelessBatterySource {
         }
     }
 
+    function withdraw(): void {
+        const withdrawn = [...root.devices];
+        if (withdrawn.length === 0)
+            return;
+        const deviceIds = withdrawn.map(device => device.deviceId);
+        root.devices = [];
+        for (const device of withdrawn)
+            device.destroy();
+        root.devicesWithdrawn(deviceIds);
+    }
+
     function helperCommand(): var {
         return ["python3", decodeURIComponent(root.helperUrl.toString().replace(/^file:\/\//, ""))];
     }
