@@ -12,6 +12,7 @@ QtObject {
     property var lowThresholds: WirelessBatteryDefaults.lowThresholds(null)
     property var trackedClasses: WirelessBatteryDefaults.trackedClasses(null)
     property bool notificationsEnabled: WirelessBatteryDefaults.notificationsEnabled
+    property bool steamControllerEnabled: WirelessBatteryDefaults.steamControllerEnabled
 
     readonly property Connections _dataWatcher: Connections {
         target: root.pluginService
@@ -36,6 +37,7 @@ QtObject {
             "headsetTracked": root._stored("headsetTracked")
         });
         root.notificationsEnabled = root._stored("notificationsEnabled") ?? WirelessBatteryDefaults.notificationsEnabled;
+        root.steamControllerEnabled = root._stored("steamControllerEnabled") ?? WirelessBatteryDefaults.steamControllerEnabled;
     }
 
     function _stored(key: string): var {

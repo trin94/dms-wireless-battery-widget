@@ -14,7 +14,11 @@ import "views"
 PluginComponent {
     id: root
 
-    readonly property WirelessBatterySource source: WirelessBatteryUPowerSource {}
+    readonly property WirelessBatterySource _upowerSource: WirelessBatteryUPowerSource {}
+
+    readonly property WirelessBatterySource source: WirelessBatteryCompositeSource {
+        sources: [root._upowerSource, WirelessBatterySteamController.source]
+    }
 
     readonly property WirelessBatterySource roster: WirelessBatteryRoster {
         source: root.source

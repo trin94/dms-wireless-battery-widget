@@ -27,6 +27,7 @@ QtObject {
     readonly property bool showPercentage: true
     readonly property bool showBolt: true
     readonly property bool showPlaceholder: true
+    readonly property bool steamControllerEnabled: false
 
     function lowThresholds(pluginData: var): var {
         const data = pluginData ?? {};

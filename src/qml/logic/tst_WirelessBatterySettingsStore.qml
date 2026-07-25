@@ -41,6 +41,7 @@ TestCase {
         compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Controller], true);
         compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Headset], true);
         compare(store.notificationsEnabled, true);
+        compare(store.steamControllerEnabled, false);
     }
 
     function test_missingServiceFallsBackToDefaults() {
@@ -49,6 +50,17 @@ TestCase {
         compare(store.lowThresholds[WirelessBatteryDevice.DeviceClass.Mouse], 10);
         compare(store.trackedClasses[WirelessBatteryDevice.DeviceClass.Mouse], true);
         compare(store.notificationsEnabled, true);
+        compare(store.steamControllerEnabled, false);
+    }
+
+    function test_storedSteamControllerEnabledOverridesDefault() {
+        const store = makeStore(makePluginService({
+            [testCase.pluginId]: {
+                "steamControllerEnabled": true
+            }
+        }));
+
+        compare(store.steamControllerEnabled, true);
     }
 
     function test_storedThresholdsOverrideDefaults() {
@@ -98,6 +110,10 @@ TestCase {
         service.savePluginData(testCase.pluginId, "notificationsEnabled", false);
 
         compare(store.notificationsEnabled, false);
+
+        service.savePluginData(testCase.pluginId, "steamControllerEnabled", true);
+
+        compare(store.steamControllerEnabled, true);
     }
 
     function test_otherPluginsDataIsIgnored() {

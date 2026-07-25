@@ -16,6 +16,6 @@
     "settings": "./src/qml/WirelessBatterySettings.qml",
     "startupCheck": "./src/qml/WirelessBatteryStartupCheck.qml",
     "requires_dms": ">=1.5.0",
-    "dependencies": ["notify-send"],
+    "dependencies": ["notify-send", "python3"],
     "permissions": ["settings_read", "settings_write", "process"]
 }
