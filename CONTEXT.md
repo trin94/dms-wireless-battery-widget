@@ -27,8 +27,14 @@ if the class becomes retained again during the session.
 *Avoid*: sticky, persistent, lingering, keep-on-disconnect
 
 **Source**:
-A backend that discovers devices and reports their battery. UPower is the only source at ship.
+A backend that discovers devices and reports their battery. UPower and the Steam Controller
+Source are the sources at ship.
 *Avoid*: provider, backend, adapter
+
+**Steam Controller Source**:
+The opt-in source that follows Steam Controller batteries by listening, read-only, to what the
+controllers already broadcast. It stands down for any controller UPower reports itself.
+*Avoid*: hidraw source, helper source, listener source
 
 **Reading**:
 A device's battery level and charge state as reported by a source at a moment in time.
