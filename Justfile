@@ -42,6 +42,11 @@ update-dependencies:
 test *args:
     uv run src/qml_test_main.py {{ args }}
 
+# Run the Python unit tests
+[group('dev')]
+test-python *args:
+    uv run pytest src {{ args }}
+
 # List all plugins and their state
 [group('dms')]
 list:

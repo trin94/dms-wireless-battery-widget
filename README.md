@@ -91,6 +91,7 @@ The most important recipes (run `just` for the full list):
 just init        # Set up the development environment
 just fmt         # Run all formatting and lint hooks
 just test        # Run the QML unit tests
+just test-python # Run the Python unit tests
 just reload      # Reload the plugin after making changes
 just mock start  # Show the widget in a mock bar with fake devices for every class
 ```

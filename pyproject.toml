@@ -15,6 +15,7 @@ dev = [
     "prek>=0.4.9",
     "pyrefly>=1.1.1",
     "pyside6-essentials>=6.11.1",
+    "pytest>=8.4.2",
     "ruff>=0.15.21",
 ]
 
@@ -41,6 +42,10 @@ unknown-name = false
 
 [tool.ruff]
 line-length = 120
+
+# The helper runs on a plain system python3, declared floor 3.10
+[tool.ruff.per-file-target-version]
+"src/steam_controller_helper.py" = "py310"
 
 [tool.ruff.lint]
 preview = true
@@ -109,6 +114,15 @@ extend-select = [
     "A003",              # Property names must mirror the Quickshell API, including `type`
 ]
 
+"**/steam_controller_helper.py" = [
+    "T201",                          # Printing JSON lines on stdout is the helper's contract
+]
+
+"**/test_steam_controller_helper.py" = [
+    "S101",                               # Pytest tests assert
+    "PLR2004",                            # Expected values in tests are literals
+]
+
 "**/lint_qml.py" = [
     "S404",           # Spawning qmllint is the script's job
     "S603",
@@ -133,6 +147,7 @@ extend-select = [
 known-first-party = [
     "qml_test_bridge",
     "qml_tooling",
+    "steam_controller_helper",
     "upower_fake",
     "upower_mock",
     "upower_service",
