@@ -22,7 +22,12 @@ QtObject {
         command: root.source.helperCommand()
         running: root.enabled
         stdout: SplitParser {
-            onRead: data => root.source.consumeLine(data)
+            // The gate keeps lines flushed during process teardown from
+            // resurrecting devices after a withdrawal.
+            onRead: data => {
+                if (root.enabled)
+                    root.source.consumeLine(data);
+            }
         }
 
         onRunningChanged: {

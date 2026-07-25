@@ -13,6 +13,11 @@ WirelessBatterySource {
 
     property int readingTimeoutMs: 15000
 
+    // Ids of every device this source ever reported, so a withdrawal also
+    // names devices that left on a "removed" event and only linger as
+    // session memory downstream.
+    property var _reportedDeviceIds: new Set()
+
     readonly property Component _deviceFactory: Component {
         WirelessBatteryDevice {
             id: device
@@ -63,9 +68,10 @@ WirelessBatterySource {
 
     function withdraw(): void {
         const withdrawn = [...root.devices];
-        if (withdrawn.length === 0)
+        const deviceIds = [...root._reportedDeviceIds];
+        if (deviceIds.length === 0)
             return;
-        const deviceIds = withdrawn.map(device => device.deviceId);
+        root._reportedDeviceIds = new Set();
         root.devices = [];
         for (const device of withdrawn)
             device.destroy();
@@ -94,6 +100,7 @@ WirelessBatterySource {
             "deviceId": event.deviceId,
             "name": event.slot === 0 ? "Steam Controller" : `Steam Controller ${event.slot + 1}`
         });
+        root._reportedDeviceIds.add(event.deviceId);
         root.devices = [...root.devices, device];
         return device;
     }

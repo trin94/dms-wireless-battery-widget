@@ -280,6 +280,32 @@ TestCase {
         compare(spy.signalArguments[0][0], ["steam-controller:FXB995480177F:0", "steam-controller:FXB995480177F:1"]);
     }
 
+    function test_withdrawAlsoForgetsRemovedControllers() {
+        const source = makeSource();
+        const spy = makeWithdrawnSpy(source);
+        testCase.feedBattery(source);
+        testCase.feedBattery(source, {
+            "slot": 1
+        });
+        testCase.feedEvent(source, "removed");
+
+        source.withdraw();
+
+        compare(spy.count, 1);
+        compare(spy.signalArguments[0][0], ["steam-controller:FXB995480177F:0", "steam-controller:FXB995480177F:1"]);
+    }
+
+    function test_withdrawForgetsOnlyOnce() {
+        const source = makeSource();
+        const spy = makeWithdrawnSpy(source);
+        testCase.feedBattery(source);
+        source.withdraw();
+
+        source.withdraw();
+
+        compare(spy.count, 1);
+    }
+
     function test_withdrawWithoutDevicesStaysSilent() {
         const source = makeSource();
         const spy = makeWithdrawnSpy(source);
