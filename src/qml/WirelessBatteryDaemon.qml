@@ -19,7 +19,17 @@ QtObject {
         pluginService: root.pluginService
     }
 
-    readonly property WirelessBatterySource _source: WirelessBatteryUPowerSource {}
+    readonly property WirelessBatterySource _upowerSource: WirelessBatteryUPowerSource {}
+
+    readonly property WirelessBatterySource _source: WirelessBatteryCompositeSource {
+        sources: [root._upowerSource, WirelessBatterySteamController.source]
+    }
+
+    readonly property Binding _steamControllerToggle: Binding {
+        target: WirelessBatterySteamController
+        property: "enabled"
+        value: root._settings.steamControllerEnabled
+    }
 
     readonly property WirelessBatterySource _trackedSource: WirelessBatteryTrackedClassFilter {
         source: root._source

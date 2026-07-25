@@ -70,6 +70,10 @@ TestCase {
         compare(retained[WirelessBatteryDevice.DeviceClass.Controller], false);
     }
 
+    function test_steamControllerSourceIsOffByDefault() {
+        compare(WirelessBatteryDefaults.steamControllerEnabled, false);
+    }
+
     function test_barDisplayTogglesAreOnByDefault() {
         compare(WirelessBatteryDefaults.showPercentage, true);
         compare(WirelessBatteryDefaults.showBolt, true);

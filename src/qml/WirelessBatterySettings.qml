@@ -225,4 +225,25 @@ PluginSettings {
         unit: "%"
         enabled: headsetTrackedToggle.value
     }
+
+    Rectangle {
+        width: parent.width
+        height: 1
+        color: Theme.outline
+        opacity: 0.3
+    }
+
+    StyledText {
+        text: I18n.tr("Steam Controller")
+        font.pixelSize: Theme.fontSizeMedium
+        font.weight: Font.Medium
+        color: Theme.surfaceText
+    }
+
+    ToggleSetting {
+        settingKey: "steamControllerEnabled"
+        label: I18n.tr("Track Steam Controller batteries (2nd gen)")
+        description: I18n.tr("Follow Steam Controller batteries by listening, read-only, to what the controllers already broadcast. Requires python3. Devices reported by UPower are unaffected.")
+        defaultValue: WirelessBatteryDefaults.steamControllerEnabled
+    }
 }
