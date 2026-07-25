@@ -289,6 +289,27 @@ TestCase {
         verify(source.devices[1].live);
     }
 
+    function test_helperCommandRunsTheHelperWithPython() {
+        const source = makeSource();
+
+        const command = source.helperCommand();
+
+        compare(command[0], "python3");
+        verify(command[1].endsWith("/steam_controller_helper.py"));
+        verify(!command[1].startsWith("file://"));
+    }
+
+    function test_helperUrlPointsAtAnExistingScript() {
+        const source = makeSource();
+        const request = new XMLHttpRequest();
+
+        request.open("GET", source.helperUrl);
+        request.send();
+
+        tryVerify(() => request.readyState === XMLHttpRequest.DONE);
+        verify(request.responseText.startsWith("# SPDX-FileCopyrightText"));
+    }
+
     function test_removalLeavesOtherControllersTracked() {
         const source = makeSource();
         testCase.feedBattery(source);

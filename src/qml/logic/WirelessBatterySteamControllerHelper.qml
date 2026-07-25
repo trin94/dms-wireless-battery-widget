@@ -10,16 +10,12 @@ WirelessBatterySteamControllerSource {
     id: root
 
     readonly property Process _helper: Process {
-        command: ["python3", root._helperPath()]
+        command: root.helperCommand()
         running: true
         stdout: SplitParser {
             onRead: data => root.consumeLine(data)
         }
 
         Component.onDestruction: running = false
-    }
-
-    function _helperPath(): string {
-        return decodeURIComponent(Qt.resolvedUrl("../../steam_controller_helper.py").toString().replace(/^file:\/\//, ""));
     }
 }

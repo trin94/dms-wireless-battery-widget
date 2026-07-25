@@ -4,6 +4,7 @@
 
 """QML unit tests running the components against a fake UPower service."""
 
+import os
 import sys
 from pathlib import Path
 
@@ -17,6 +18,7 @@ QS_FAKE_DIR = Path(__file__).parent / "qs_fake"
 
 
 def main() -> int:
+    os.environ["QML_XHR_ALLOW_FILE_READ"] = "1"
     upower_fake.register()
     qml_test_bridge.register()
     argv = [

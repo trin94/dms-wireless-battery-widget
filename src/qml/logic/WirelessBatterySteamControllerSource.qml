@@ -9,6 +9,8 @@ import QtQuick
 WirelessBatterySource {
     id: root
 
+    readonly property url helperUrl: Qt.resolvedUrl("../../steam_controller_helper.py")
+
     property int readingTimeoutMs: 15000
 
     readonly property Component _deviceFactory: Component {
@@ -53,6 +55,10 @@ WirelessBatterySource {
             }
             break;
         }
+    }
+
+    function helperCommand(): var {
+        return ["python3", decodeURIComponent(root.helperUrl.toString().replace(/^file:\/\//, ""))];
     }
 
     function _parseLine(line: string): var {
