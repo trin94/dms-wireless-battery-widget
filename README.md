@@ -15,23 +15,25 @@ battery levels of your wireless peripherals (mice, keyboards, game controllers, 
 in the bar.
 
 > [!IMPORTANT]
-> 🤖 AI agents wrote this plugin entirely, with a human orchestrating the agents
+> 🤖 AI agents wrote this plugin entirely, with a human directing the agents
 > using skills from the [AI Hero skills catalog](https://www.aihero.dev/skills-catalog).
 
 ![Preview](docs/preview.webp)
 
-- 🔋 One entry per device in a single bar pill: class icon, percentage, and a bolt while charging.
+- 🔋 Every device gets its own entry in a single bar pill: class icon, percentage, and a bolt while charging.
 - 💤 A device of a retained class stays visible when no longer live, dimmed at its last reading, until the session ends.
 - 🚨 Low readings turn red, and a desktop notification fires when a device drops to its class's low threshold.
 - 🪟 Click the pill for a popout with per-device detail.
-- ⚙️ Settings for tracked classes, retention, low thresholds, notifications, and appearance. Changes apply live.
-- ↕️ Renders in horizontal and vertical bars.
-- 🔌 Reads `Quickshell.Services.UPower` directly. No polling.
+- ⚙️ Settings cover tracked classes, retention, low thresholds, notifications, and appearance. Changes apply live.
+- ↕️ The widget renders in horizontal and vertical bars.
+- 🔌 Battery data comes straight from `Quickshell.Services.UPower`. The widget never polls.
+- 🎮 An opt-in toggle adds the 2nd generation Steam Controller, which UPower cannot see yet.
 
 ## Requirements
 
 You need Dank Material Shell 1.5.0 or newer, `notify-send` for the notifications, and devices
-whose batteries UPower reports. To check which of your devices qualify:
+whose batteries UPower reports. Steam Controller support is optional and needs `python3`
+(3.10 or newer). To check which of your devices qualify:
 
 ```sh
 for d in $(upower -e); do
@@ -40,6 +42,19 @@ done
 ```
 
 If a device is missing from the output, its driver does not expose the battery to UPower and the widget cannot see it.
+
+## Steam Controller (2nd gen)
+
+The 2nd generation Steam Controller (2026) has no kernel driver yet, so UPower does not report
+its battery. The widget can follow it anyway: enable **Track Steam Controller batteries
+(2nd gen)** in the plugin settings. While the toggle is on, a `python3` helper only listens
+to the battery reports the controller already broadcasts. It never writes to the device, so
+it cannot interfere with Steam or your games. The controller then behaves like any other
+tracked device: pill entry, charging bolt, tones, low-battery notification.
+
+The toggle is off by default. Turning it on or off takes effect right away, without restarting
+the shell. Once a future kernel reports the controller through UPower, the helper stops by
+itself and UPower takes over.
 
 ## Installation
 
@@ -63,7 +78,6 @@ Then add the widget to the bar from [the plugin settings](https://danklinux.com/
 
 ## Roadmap
 
-- Steam Controller support.
 - Devices whose batteries UPower does not report.
 
 ## Alternatives
@@ -96,9 +110,9 @@ just reload      # Reload the plugin after making changes
 just mock start  # Show the widget in a mock bar with fake devices for every class
 ```
 
-`just test` runs the `tst_*.qml` files through Qt Quick Test on a PySide6 engine, with a fake
-UPower service standing in for the real daemon and QML fakes of the DMS `qs.*` modules
-(`src/qs_fake`) so the pill views render under test.
+`just test` runs the `tst_*.qml` files through Qt Quick Test on a PySide6 engine. A fake
+UPower service stands in for the real daemon, and QML fakes of the DMS `qs.*` modules
+(`src/qs_fake`) let the pill views render under test.
 
 The product spec lives in
 [issue #1](https://github.com/trin94/dms-wireless-battery-widget/issues/1), the domain glossary
