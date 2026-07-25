@@ -9,4 +9,6 @@ ADR 0005 intends. Retention filters, never forgets — the roster's session memo
 which is what lets a vanished device reappear at its last reading when it is live again or when
 its class becomes retained again. We rejected evicting non-retained devices from the roster
 because eviction would lose the last reading and make reappearing impossible without a fresh
-live report.
+live report. "Never forgets" is scoped to retention toggling: when a whole source is removed,
+the removal is announced through the source contract and the roster forgets that source's
+devices entirely, so they cannot resurface for a source that no longer exists.
