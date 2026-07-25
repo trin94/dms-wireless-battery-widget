@@ -31,7 +31,8 @@ WirelessBatterySource {
         const device = root.devices.find(candidate => candidate.deviceId === event.deviceId);
         switch (event.event) {
         case "battery":
-            root._applyReading(device ?? root._bornDevice(event), event);
+            if (typeof event.level === "number")
+                root._applyReading(device ?? root._bornDevice(event), event);
             break;
         case "connect":
             if (device) {
