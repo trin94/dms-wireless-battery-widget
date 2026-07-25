@@ -17,9 +17,19 @@ WirelessBatterySource {
         WirelessBatteryDevice {
             id: device
 
-            readonly property Timer readingTimeout: Timer {
+            readonly property Timer _readingTimeout: Timer {
                 interval: root.readingTimeoutMs
-                onTriggered: device.live = false
+                onTriggered: device.expire()
+            }
+
+            function revive(): void {
+                device.live = true;
+                device._readingTimeout.restart();
+            }
+
+            function expire(): void {
+                device.live = false;
+                device._readingTimeout.stop();
             }
 
             deviceClass: WirelessBatteryDevice.DeviceClass.Controller
@@ -34,19 +44,13 @@ WirelessBatterySource {
         switch (event.event) {
         case "battery":
             if (typeof event.level === "number")
-                root._applyReading(device ?? root._bornDevice(event), event);
+                root._applyReading(device ?? root._createDevice(event), event);
             break;
         case "connect":
-            if (device) {
-                device.live = true;
-                device.readingTimeout.restart();
-            }
+            device?.revive();
             break;
         case "disconnect":
-            if (device) {
-                device.live = false;
-                device.readingTimeout.stop();
-            }
+            device?.expire();
             break;
         case "removed":
             if (device) {
@@ -74,7 +78,7 @@ WirelessBatterySource {
         return event;
     }
 
-    function _bornDevice(event: var): var {
+    function _createDevice(event: var): var {
         const device = root._deviceFactory.createObject(root, {
             "deviceId": event.deviceId,
             "name": event.slot === 0 ? "Steam Controller" : `Steam Controller ${event.slot + 1}`
@@ -86,8 +90,7 @@ WirelessBatterySource {
     function _applyReading(device: var, event: var): void {
         device.level = event.level / 100;
         device.chargeState = root._chargeStateOf(event.state);
-        device.live = true;
-        device.readingTimeout.restart();
+        device.revive();
     }
 
     function _chargeStateOf(state: string): int {
