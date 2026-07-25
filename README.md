@@ -24,9 +24,9 @@ in the bar.
 - 💤 A device of a retained class stays visible when no longer live, dimmed at its last reading, until the session ends.
 - 🚨 Low readings turn red, and a desktop notification fires when a device drops to its class's low threshold.
 - 🪟 Click the pill for a popout with per-device detail.
-- ⚙️ Settings cover tracked classes, retention, low thresholds, notifications, and appearance. Changes apply live.
+- ⚙️ Each device class has its own settings. Changes apply live.
 - ↕️ The widget renders in horizontal and vertical bars.
-- 🔌 Battery data comes straight from `Quickshell.Services.UPower`. The widget never polls.
+- 🔌 Battery data comes straight from `Quickshell.Services.UPower`.
 - 🎮 An opt-in toggle adds the 2nd generation Steam Controller, which UPower cannot see yet.
 
 ## Requirements
@@ -45,16 +45,11 @@ If a device is missing from the output, its driver does not expose the battery t
 
 ## Steam Controller (2nd gen)
 
-The 2nd generation Steam Controller (2026) has no kernel driver yet, so UPower does not report
-its battery. The widget can follow it anyway: enable **Track Steam Controller batteries
-(2nd gen)** in the plugin settings. While the toggle is on, a `python3` helper only listens
-to the battery reports the controller already broadcasts. It never writes to the device, so
-it cannot interfere with Steam or your games. The controller then behaves like any other
-tracked device: pill entry, charging bolt, tones, low-battery notification.
-
-The toggle is off by default. Turning it on or off takes effect right away, without restarting
-the shell. Once a future kernel reports the controller through UPower, the helper stops by
-itself and UPower takes over.
+UPower cannot see the 2nd generation Steam Controller (2026) yet, but the widget can still
+track it: enable **Track Steam Controller batteries (2nd gen)** in the plugin settings. The
+toggle is off by default. While the toggle is on, a `python3` helper listens to the battery
+reports that the controller already broadcasts, so it cannot interfere with Steam or your
+games. The controller then behaves like any other tracked device.
 
 ## Installation
 
