@@ -27,6 +27,24 @@ WirelessBatterySource {
         WirelessBatteryDevice {}
     }
 
+    readonly property Connections _sourceRemovals: Connections {
+        target: root.source
+
+        function onSourceRemoved(deviceIds: list<string>) {
+            root._forget(deviceIds);
+        }
+    }
+
+    function _forget(deviceIds: list<string>): void {
+        const removed = new Set(deviceIds);
+        const forgotten = root.devices.filter(device => removed.has(device.deviceId));
+        if (forgotten.length === 0)
+            return;
+        root.devices = root.devices.filter(device => !removed.has(device.deviceId));
+        for (const device of forgotten)
+            device.destroy();
+    }
+
     function _sync(): void {
         const liveIds = new Set(root._liveSnapshots.map(snapshot => snapshot.deviceId));
         for (const snapshot of root._liveSnapshots) {

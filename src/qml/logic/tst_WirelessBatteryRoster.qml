@@ -30,6 +30,15 @@ TestCase {
         return roster;
     }
 
+    function makeRetainedFilter(source: WirelessBatterySource, retainedClasses): WirelessBatteryRetainedClassFilter {
+        const filter = createTemporaryObject(retainedFilterFactory, testCase, {
+            "source": source,
+            "retainedClasses": retainedClasses
+        });
+        verify(filter);
+        return filter;
+    }
+
     function test_liveDeviceIsTracked() {
         const source = makeSource();
         source.devices = [makeDevice({
@@ -220,6 +229,99 @@ TestCase {
         compare(roster.devices[0].live, true);
     }
 
+    function test_removedSourceDeviceIsForgotten() {
+        const source = makeSource();
+        source.devices = [makeDevice({
+                "deviceId": "controller-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Controller,
+                "level": 0.75,
+                "live": true
+            })];
+        const roster = makeRoster(source);
+        compare(roster.devices.length, 1);
+
+        source.devices = [];
+        source.sourceRemoved(["controller-1"]);
+        wait(0);
+
+        compare(roster.devices.length, 0);
+    }
+
+    function test_removedSourceStaleDeviceIsForgotten() {
+        const source = makeSource();
+        const device = makeDevice({
+            "deviceId": "controller-1",
+            "deviceClass": WirelessBatteryDevice.DeviceClass.Controller,
+            "level": 0.75,
+            "live": true
+        });
+        source.devices = [device];
+        const roster = makeRoster(source);
+        device.live = false;
+        wait(0);
+        compare(roster.devices.length, 1);
+
+        source.devices = [];
+        source.sourceRemoved(["controller-1"]);
+        wait(0);
+
+        compare(roster.devices.length, 0);
+    }
+
+    function test_removedSourceLeavesOtherDevicesTracked() {
+        const source = makeSource();
+        const mouse = makeDevice({
+            "deviceId": "mouse-1",
+            "deviceClass": WirelessBatteryDevice.DeviceClass.Mouse,
+            "level": 0.5,
+            "live": true
+        });
+        source.devices = [mouse, makeDevice({
+                "deviceId": "controller-1",
+                "deviceClass": WirelessBatteryDevice.DeviceClass.Controller,
+                "level": 0.75,
+                "live": true
+            })];
+        const roster = makeRoster(source);
+        compare(roster.devices.length, 2);
+
+        source.devices = [mouse];
+        source.sourceRemoved(["controller-1"]);
+        wait(0);
+
+        compare(roster.devices.map(device => device.deviceId), ["mouse-1"]);
+        compare(roster.devices[0].live, true);
+    }
+
+    function test_forgottenDeviceDoesNotReappearWhenRetentionIsGranted() {
+        const source = makeSource();
+        const device = makeDevice({
+            "deviceId": "controller-1",
+            "deviceClass": WirelessBatteryDevice.DeviceClass.Controller,
+            "level": 0.75,
+            "live": true
+        });
+        source.devices = [device];
+        const roster = makeRoster(source);
+        const retainedClasses = WirelessBatteryDefaults.retainedClasses(null);
+        retainedClasses[WirelessBatteryDevice.DeviceClass.Controller] = false;
+        const filter = makeRetainedFilter(roster, retainedClasses);
+        device.live = false;
+        wait(0);
+        compare(filter.devices.length, 0);
+        compare(roster.devices.length, 1);
+
+        source.devices = [];
+        source.sourceRemoved(["controller-1"]);
+        wait(0);
+
+        const grantedClasses = WirelessBatteryDefaults.retainedClasses(null);
+        grantedClasses[WirelessBatteryDevice.DeviceClass.Controller] = true;
+        filter.retainedClasses = grantedClasses;
+
+        compare(filter.devices.length, 0);
+    }
+
     Component {
         id: sourceFactory
 
@@ -236,5 +338,11 @@ TestCase {
         id: rosterFactory
 
         WirelessBatteryRoster {}
+    }
+
+    Component {
+        id: retainedFilterFactory
+
+        WirelessBatteryRetainedClassFilter {}
     }
 }
