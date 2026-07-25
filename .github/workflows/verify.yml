@@ -47,5 +47,7 @@ jobs:
           SKIP: qmllint
       - name: Run the QML tests
         run: just test
+      - name: Run the Python tests
+        run: just test-python
       - name: Verify REUSE compliance
         uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6
