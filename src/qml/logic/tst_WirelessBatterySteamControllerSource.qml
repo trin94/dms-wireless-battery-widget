@@ -28,13 +28,18 @@ TestCase {
         source.consumeLine(JSON.stringify(event));
     }
 
-    function feedBattery(source: WirelessBatterySteamControllerSource, overrides = {}) {
+    function feedEvent(source: WirelessBatterySteamControllerSource, name: string, overrides = {}) {
         testCase.feed(source, Object.assign({
-            "event": "battery",
-            "level": 78,
-            "state": "discharging",
+            "event": name,
             "serial": "FXB995480177F",
             "slot": 0
+        }, overrides));
+    }
+
+    function feedBattery(source: WirelessBatterySteamControllerSource, overrides = {}) {
+        testCase.feedEvent(source, "battery", Object.assign({
+            "level": 78,
+            "state": "discharging"
         }, overrides));
     }
 
@@ -65,11 +70,7 @@ TestCase {
     function test_connectAloneCreatesNothing() {
         const source = makeSource();
 
-        testCase.feed(source, {
-            "event": "connect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "connect");
 
         compare(source.devices.length, 0);
     }
@@ -77,13 +78,8 @@ TestCase {
     function test_eventsForUnknownDevicesCreateNothing() {
         const source = makeSource();
 
-        for (const event of ["disconnect", "removed"]) {
-            testCase.feed(source, {
-                "event": event,
-                "serial": "FXB995480177F",
-                "slot": 0
-            });
-        }
+        for (const event of ["disconnect", "removed"])
+            testCase.feedEvent(source, event);
 
         compare(source.devices.length, 0);
     }
@@ -94,11 +90,15 @@ TestCase {
         source.consumeLine("");
         source.consumeLine("not json");
         source.consumeLine("{\"event\": \"battery\", \"level\": 50, \"state\": \"discharging\"}");
-        testCase.feed(source, {
-            "event": "battery",
-            "state": "discharging",
-            "serial": "FXB995480177F",
-            "slot": 0
+
+        compare(source.devices.length, 0);
+    }
+
+    function test_batteryEventWithoutLevelIsIgnored() {
+        const source = makeSource();
+
+        testCase.feedEvent(source, "battery", {
+            "state": "discharging"
         });
 
         compare(source.devices.length, 0);
@@ -167,11 +167,7 @@ TestCase {
         const source = makeSource();
         testCase.feedBattery(source);
 
-        testCase.feed(source, {
-            "event": "disconnect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "disconnect");
 
         compare(source.devices.length, 1);
         verify(!source.devices[0].live);
@@ -181,17 +177,9 @@ TestCase {
     function test_connectRevivesTheDeviceAtItsLastReading() {
         const source = makeSource();
         testCase.feedBattery(source);
-        testCase.feed(source, {
-            "event": "disconnect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "disconnect");
 
-        testCase.feed(source, {
-            "event": "connect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "connect");
 
         verify(source.devices[0].live);
         compare(source.devices[0].level, 0.78);
@@ -228,11 +216,7 @@ TestCase {
         testCase.feedBattery(source);
         tryVerify(() => !source.devices[0].live);
 
-        testCase.feed(source, {
-            "event": "connect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "connect");
 
         verify(source.devices[0].live);
         tryVerify(() => !source.devices[0].live);
@@ -244,11 +228,7 @@ TestCase {
         testCase.feedBattery(source);
         const deviceId = source.devices[0].deviceId;
 
-        testCase.feed(source, {
-            "event": "removed",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "removed");
         compare(source.devices.length, 0);
         testCase.feedBattery(source, {
             "level": 42
@@ -279,11 +259,7 @@ TestCase {
             "slot": 1
         });
 
-        testCase.feed(source, {
-            "event": "disconnect",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "disconnect");
 
         verify(!source.devices[0].live);
         verify(source.devices[1].live);
@@ -317,11 +293,7 @@ TestCase {
             "slot": 1
         });
 
-        testCase.feed(source, {
-            "event": "removed",
-            "serial": "FXB995480177F",
-            "slot": 0
-        });
+        testCase.feedEvent(source, "removed");
 
         compare(source.devices.length, 1);
         compare(source.devices[0].name, "Steam Controller 2");
