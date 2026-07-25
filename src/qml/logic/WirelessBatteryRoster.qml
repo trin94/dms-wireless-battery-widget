@@ -27,10 +27,10 @@ WirelessBatterySource {
         WirelessBatteryDevice {}
     }
 
-    readonly property Connections _sourceRemovals: Connections {
+    readonly property Connections _withdrawals: Connections {
         target: root.source
 
-        function onSourceRemoved(deviceIds: list<string>) {
+        function onDevicesWithdrawn(deviceIds: list<string>) {
             root._forget(deviceIds);
         }
     }

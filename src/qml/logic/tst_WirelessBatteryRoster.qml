@@ -241,7 +241,7 @@ TestCase {
         compare(roster.devices.length, 1);
 
         source.devices = [];
-        source.sourceRemoved(["controller-1"]);
+        source.devicesWithdrawn(["controller-1"]);
         wait(0);
 
         compare(roster.devices.length, 0);
@@ -262,7 +262,7 @@ TestCase {
         compare(roster.devices.length, 1);
 
         source.devices = [];
-        source.sourceRemoved(["controller-1"]);
+        source.devicesWithdrawn(["controller-1"]);
         wait(0);
 
         compare(roster.devices.length, 0);
@@ -286,7 +286,7 @@ TestCase {
         compare(roster.devices.length, 2);
 
         source.devices = [mouse];
-        source.sourceRemoved(["controller-1"]);
+        source.devicesWithdrawn(["controller-1"]);
         wait(0);
 
         compare(roster.devices.map(device => device.deviceId), ["mouse-1"]);
@@ -312,7 +312,7 @@ TestCase {
         compare(roster.devices.length, 1);
 
         source.devices = [];
-        source.sourceRemoved(["controller-1"]);
+        source.devicesWithdrawn(["controller-1"]);
         wait(0);
 
         const grantedClasses = WirelessBatteryDefaults.retainedClasses(null);
