@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 [![REUSE status](https://api.reuse.software/badge/github.com/trin94/dms-wireless-battery-widget)](https://api.reuse.software/info/github.com/trin94/dms-wireless-battery-widget)
 [![License: MIT](https://img.shields.io/github/license/trin94/dms-wireless-battery-widget)](LICENSES/MIT.txt)
 
-A [Dank Material Shell](https://github.com/AvengeMedia/DankMaterialShell) plugin that shows the
+A [Dux Shell](https://github.com/duxlabs-dev/dux-shell) plugin that shows the
 battery levels of your wireless peripherals (mice, keyboards, game controllers, and headsets)
 in the bar.
 
@@ -31,7 +31,7 @@ in the bar.
 
 ## Requirements
 
-You need Dank Material Shell 1.5.0 or newer, `notify-send` for the notifications, and devices
+You need Dux Shell 2.1.0 or newer, `notify-send` for the notifications, and devices
 whose batteries UPower reports. Steam Controller support is optional and needs `python3`
 (3.10 or newer). To check which of your devices qualify:
 
@@ -55,21 +55,21 @@ games. The controller then behaves like any other tracked device.
 
 This plugin is not yet in the official third-party plugin repository, so install it manually.
 
-Clone the repo into the DMS plugins directory:
+Clone the repo into the Dux Shell plugins directory:
 
 ```sh
-git clone https://github.com/trin94/dms-wireless-battery-widget.git ~/.config/DankMaterialShell/plugins/dms-wireless-battery-widget
+git clone https://github.com/trin94/dms-wireless-battery-widget.git ~/.config/dms/plugins/dms-wireless-battery-widget
 ```
 
 Or clone it anywhere and symlink it in:
 
 ```sh
 git clone https://github.com/trin94/dms-wireless-battery-widget.git
-mkdir -p ~/.config/DankMaterialShell/plugins
-ln -s "$PWD/dms-wireless-battery-widget" ~/.config/DankMaterialShell/plugins/dms-wireless-battery-widget
+mkdir -p ~/.config/dms/plugins
+ln -s "$PWD/dms-wireless-battery-widget" ~/.config/dms/plugins/dms-wireless-battery-widget
 ```
 
-Then add the widget to the bar from [the plugin settings](https://danklinux.com/docs/dankmaterialshell/plugin-development#5-load-it).
+Then add the widget to the bar from [the plugin settings](https://duxlabs.dev/docs/dms/plugin-development#5-load-it).
 
 ## Roadmap
 
@@ -78,11 +78,11 @@ Then add the widget to the bar from [the plugin settings](https://danklinux.com/
 ## Alternatives
 
 - [dms-mouse-battery](https://github.com/Ripolin99/dms-mouse-battery) also shows the mouse
-  battery in DMS and adds DPI preset switching via Solaar or ratbagctl.
+  battery in Dux Shell and adds DPI preset switching via Solaar or ratbagctl.
 
 ## Contributing
 
-Set up the dev environment per the official [plugin development guide](https://danklinux.com/docs/dankmaterialshell/plugin-development#development-environment),
+Set up the dev environment per the official [plugin development guide](https://duxlabs.dev/docs/dms/plugin-development#development-environment),
 with one change: this is a standalone repo, so don't create a directory under `dms-plugins/`.
 
 Instead, clone the repo into a directory of your choice, then run `just init`.
@@ -92,7 +92,7 @@ Required tools:
 - [just](https://github.com/casey/just) runs the development tasks.
 - [uv](https://docs.astral.sh/uv/) manages the Python environment and installs all dev dependencies itself.
 - `dbus-daemon` hosts the private bus the mock bar fakes UPower on.
-- `dms` drives the hot-reload recipes. It comes with Dank Material Shell.
+- `dms` drives the hot-reload recipes. It comes with Dux Shell.
 
 The most important recipes (run `just` for the full list):
 
@@ -106,7 +106,7 @@ just mock start  # Show the widget in a mock bar with fake devices for every cla
 ```
 
 `just test` runs the `tst_*.qml` files through Qt Quick Test on a PySide6 engine. A fake
-UPower service stands in for the real daemon, and QML fakes of the DMS `qs.*` modules
+UPower service stands in for the real daemon, and QML fakes of the Dux Shell `qs.*` modules
 (`src/qs_fake`) let the pill views render under test.
 
 The product spec lives in

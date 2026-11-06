@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-"""Generate the QML tooling files for the DMS qs.* imports."""
+"""Generate the QML tooling files for the Dux Shell qs.* imports."""
 
 import re
 import shutil
@@ -17,7 +17,7 @@ SHIM_ROOT = REPO_ROOT / ".qmllint-imports"
 BRIDGE_MODULE = "WirelessBatteryWidget.Test"
 BRIDGE_SOURCE = REPO_ROOT / "src" / "qml_test_bridge.py"
 
-DMS_ROOTS = (
+SHELL_ROOTS = (
     Path.home() / ".config" / "quickshell" / "dms",
     Path("/usr/share/quickshell/dms"),
 )
@@ -31,8 +31,8 @@ MODULE_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 OPAQUE_TYPE_MARKER = re.compile(r"isTypeOpaque: true;?\s*")
 
 
-def find_dms_root() -> Path | None:
-    for root in DMS_ROOTS:
+def find_shell_root() -> Path | None:
+    for root in SHELL_ROOTS:
         if (root / "shell.qml").is_file():
             return root
     return None
@@ -48,15 +48,15 @@ def qmldir_content(module: str, files: list[Path]) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_shims(dms_root: Path) -> None:
+def generate_shims(shell_root: Path) -> None:
     qs_root = SHIM_ROOT / "qs"
     if qs_root.is_symlink():
         qs_root.unlink()
     elif qs_root.exists():
         shutil.rmtree(qs_root)
 
-    for directory in (dms_root, *sorted(dms_root.rglob("*/"))):
-        relative = directory.relative_to(dms_root)
+    for directory in (shell_root, *sorted(shell_root.rglob("*/"))):
+        relative = directory.relative_to(shell_root)
         if not all(MODULE_IDENTIFIER.match(part) for part in relative.parts):
             continue
 
@@ -121,18 +121,18 @@ def write_qmlls_ini() -> None:
     ini.write_text(f"[General]\nno-cmake-calls=true\nimportPaths={paths}\n", encoding="utf-8")
 
 
-def generate(dms_root: Path) -> None:
-    generate_shims(dms_root)
+def generate(shell_root: Path) -> None:
+    generate_shims(shell_root)
     generate_bridge_types()
     write_qmlls_ini()
 
 
 def main() -> int:
-    dms_root = find_dms_root()
-    if dms_root is None:
-        sys.stderr.write("error: no DMS installation found\n")
+    shell_root = find_shell_root()
+    if shell_root is None:
+        sys.stderr.write("error: no Dux Shell installation found\n")
         return 1
-    generate(dms_root)
+    generate(shell_root)
     return 0
 
 

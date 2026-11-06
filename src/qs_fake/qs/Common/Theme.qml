@@ -6,7 +6,7 @@ pragma Singleton
 
 import QtQuick
 
-// Test fake of the DMS theme singleton: fixed metrics and colors so view
+// Test fake of the Dux Shell theme singleton: fixed metrics and colors so view
 // tests get deterministic sizes.
 QtObject {
     readonly property int spacingXS: 4

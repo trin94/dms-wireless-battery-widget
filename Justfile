@@ -5,7 +5,7 @@
 set lazy
 
 PLUGIN_ID := 'wirelessBatteryWidget'
-LINK := config_directory() / 'DankMaterialShell' / 'plugins' / file_name(justfile_directory())
+LINK := config_directory() / 'dms' / 'plugins' / file_name(justfile_directory())
 
 alias fmt := format
 
@@ -48,23 +48,23 @@ test-python *args:
     uv run pytest src {{ args }}
 
 # List all plugins and their state
-[group('dms')]
+[group('dux')]
 list:
     dms ipc call plugins list
 
 # Check whether the plugin is running
-[group('dms')]
+[group('dux')]
 status:
     dms ipc call plugins status {{ PLUGIN_ID }}
 
 # Reload the plugin after making changes
-[group('dms')]
+[group('dux')]
 reload:
     dms ipc call plugins reload {{ PLUGIN_ID }}
 
-# Restart DMS with a fresh plugin symlink
-[group('dms')]
+# Restart Dux Shell with a fresh plugin symlink
+[group('dux')]
 restart:
-    rm -f {{ LINK }}
+    @if [ -e '{{ LINK }}' ] && [ ! -L '{{ LINK }}' ]; then echo 'error: {{ LINK }} is not a symlink, remove it by hand' >&2; exit 1; fi
+    ln -sfn '{{ justfile_directory() }}' '{{ LINK }}'
     dms restart
-    ln -s {{ justfile_directory() }} {{ LINK }}

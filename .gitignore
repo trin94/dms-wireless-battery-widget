@@ -219,7 +219,7 @@ tags
 __pycache__/
 /.rumdl_cache/
 
-# Mock bar: generated symlinks into the installed DMS config
+# Mock bar: generated symlinks into the installed Dux Shell config
 /src/mock/preview/*
 !/src/mock/preview/shell.qml
 !/src/mock/preview/MockPluginService.qml

@@ -4,7 +4,7 @@
 
 import QtQuick
 
-// Test fake of the DMS icon widget: takes up the icon's box without
+// Test fake of the Dux Shell icon widget: takes up the icon's box without
 // rendering a glyph.
 Item {
     property string name

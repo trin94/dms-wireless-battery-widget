@@ -7,7 +7,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 
 import qs.Common
-import qs.Widgets
+import qs.DCommon.Widgets
 
 import "../logic"
 
@@ -16,7 +16,6 @@ Column {
 
     required property WirelessBatteryPopoutViewModel viewModel
 
-    padding: Theme.spacingM
     spacing: Theme.spacingL
 
     component BarSegment: Rectangle {
@@ -53,10 +52,10 @@ Column {
             readonly property color rowTextColor: modelData.stale ? Theme.surfaceTextMedium : Theme.surfaceText
             readonly property color fillColor: WirelessBatteryToneColors.fillForTone(modelData.tone)
 
-            width: root.width - 2 * root.padding
+            width: root.width
             height: details.implicitHeight
 
-            DankIcon {
+            DIcon {
                 id: classIcon
 
                 name: row.modelData.iconName

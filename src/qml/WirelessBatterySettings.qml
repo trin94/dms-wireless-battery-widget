@@ -5,8 +5,8 @@
 import QtQuick
 
 import qs.Common
+import qs.DCommon.Widgets
 import qs.Modules.Plugins
-import qs.Widgets
 
 import "logic"
 
@@ -18,7 +18,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Bar")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -51,7 +51,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Notifications")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -72,7 +72,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Mouse")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -113,7 +113,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Keyboard")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -154,7 +154,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Controller")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -195,7 +195,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Headset")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 
@@ -236,7 +236,7 @@ PluginSettings {
     StyledText {
         text: I18n.tr("Steam Controller")
         font.pixelSize: Theme.fontSizeMedium
-        font.weight: Font.Medium
+        font.weight: Theme.fontWeightMedium
         color: Theme.surfaceText
     }
 

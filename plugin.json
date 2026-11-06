@@ -1,9 +1,9 @@
 {
-    "$schema": "https://raw.githubusercontent.com/AvengeMedia/DankMaterialShell/refs/heads/master/quickshell/PLUGINS/plugin-schema.json",
+    "$schema": "https://raw.githubusercontent.com/duxlabs-dev/dux-shell/refs/tags/v2.1.0/quickshell/PLUGINS/plugin-schema.json",
     "id": "wirelessBatteryWidget",
     "name": "Wireless Battery Widget",
     "description": "Shows wireless peripheral battery levels in the bar",
-    "version": "0.1.1",
+    "version": "0.2.0",
     "author": "Elias Mueller",
     "homepage": "https://github.com/trin94/dms-wireless-battery-widget",
     "icon": "battery_full",
@@ -15,7 +15,7 @@
     },
     "settings": "./src/qml/WirelessBatterySettings.qml",
     "startupCheck": "./src/qml/WirelessBatteryStartupCheck.qml",
-    "requires_dms": ">=1.5.0",
+    "requires_dms": ">=2.1.0",
     "dependencies": ["notify-send", "python3"],
     "permissions": ["settings_read", "settings_write", "process"]
 }

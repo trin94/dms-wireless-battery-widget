@@ -7,7 +7,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 
 import qs.Common
-import qs.Widgets
+import qs.DCommon.Widgets
 
 import "../logic"
 
@@ -112,7 +112,7 @@ Item {
                     spacing: 0
                     anchors.verticalCenter: parent.verticalCenter
 
-                    DankIcon {
+                    DIcon {
                         name: entry.iconName
                         size: root.iconSize
                         color: entry.entryColor
@@ -126,7 +126,7 @@ Item {
                         clip: true
                         anchors.verticalCenter: parent.verticalCenter
 
-                        DankIcon {
+                        DIcon {
                             name: "bolt"
                             size: root.iconSize
                             color: Theme.primary

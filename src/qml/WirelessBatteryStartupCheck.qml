@@ -15,7 +15,7 @@ QtObject {
             if (component.status === Component.Error) {
                 console.warn("WirelessBatteryWidget: startup check failed:", component.errorString());
                 return {
-                    title: "Incompatible DMS or Quickshell installation",
+                    title: "Incompatible Dux Shell or Quickshell installation",
                     details: component.errorString()
                 };
             }

@@ -159,7 +159,7 @@ hooks = [
         files = '^plugin\.json$',
         args = [
             "--schemafile",
-            "https://raw.githubusercontent.com/AvengeMedia/DankMaterialShell/refs/heads/master/quickshell/PLUGINS/plugin-schema.json",
+            "https://raw.githubusercontent.com/duxlabs-dev/dux-shell/refs/tags/v2.1.0/quickshell/PLUGINS/plugin-schema.json",
         ],
     },
 ]

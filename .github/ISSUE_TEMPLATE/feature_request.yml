@@ -42,6 +42,6 @@ body:
     id: context
     attributes:
       label: Additional context
-      description: Anything else, e.g. mockups, related DMS features, or links.
+      description: Anything else, e.g. mockups, related Dux Shell features, or links.
     validations:
       required: false
