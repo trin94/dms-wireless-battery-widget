@@ -3,7 +3,7 @@
     "id": "wirelessBatteryWidget",
     "name": "Wireless Battery Widget",
     "description": "Shows wireless peripheral battery levels in the bar",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Elias Mueller",
     "homepage": "https://github.com/trin94/dms-wireless-battery-widget",
     "icon": "battery_full",
