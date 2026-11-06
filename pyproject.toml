@@ -12,9 +12,9 @@ dependencies = []
 [dependency-groups]
 dev = [
     "dbus-fast>=5.0.22",
-    "prek>=0.4.9",
+    "prek>=0.5.10",
     "pyrefly>=1.1.1",
-    "pyside6-essentials>=6.11.1",
+    "pyside6-essentials>=6.12.0",
     "pytest>=8.4.2",
     "ruff>=0.15.21",
 ]
