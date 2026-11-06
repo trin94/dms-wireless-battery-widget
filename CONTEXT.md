@@ -1,9 +1,14 @@
 # Wireless Peripheral Battery
 
 Battery levels of wireless peripherals (mice, keyboards, game controllers, headsets) shown in the
-DMS bar. One widget instance, one entry per device.
+Dux Shell bar. One widget instance, one entry per device.
 
 ## Language
+
+**Dux Shell**:
+The desktop shell the plugin runs in. Its old name was Dank Material Shell (DMS), which older
+ADRs still use. Commands, paths, and modules the shell owns keep their real names, like `dms`.
+*Avoid*: DMS, Dank Material Shell
 
 **Tracked Device**:
 A device of a tracked class whose battery the plugin follows. Every tracked device gets its own

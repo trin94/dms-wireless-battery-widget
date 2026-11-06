@@ -4,7 +4,7 @@
 
 export PYTHONPATH := source_directory() / '..'
 
-DMS_ROOT := if path_exists(config_directory() / 'quickshell' / 'dms' / 'shell.qml') == 'true' { config_directory() / 'quickshell' / 'dms' } else { '/usr/share/quickshell/dms' }
+SHELL_ROOT := if path_exists(config_directory() / 'quickshell' / 'dms' / 'shell.qml') == 'true' { config_directory() / 'quickshell' / 'dms' } else { '/usr/share/quickshell/dms' }
 LOG := env('XDG_RUNTIME_DIR', '/tmp') / 'wireless-battery-mock.log'
 CONTROL := 'io.github.trin94.WirelessBatteryWidget.Mock'
 SERVE := source_directory() / 'serve.py'
@@ -121,5 +121,5 @@ preset name='':
 
 [private]
 @_links:
-    for entry in '{{ DMS_ROOT }}'/*/; do ln -sfn "${entry%/}" preview/; done
+    for entry in '{{ SHELL_ROOT }}'/*/; do ln -sfn "${entry%/}" preview/; done
     ln -sfn ../../qml preview/WirelessBattery

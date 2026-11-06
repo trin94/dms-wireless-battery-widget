@@ -4,7 +4,7 @@
 
 import QtQuick
 
-// Test fake of the DMS text widget: a plain Text with the same interface.
+// Test fake of the Dux Shell text widget: a plain Text with the same interface.
 Text {
     color: "white"
 }

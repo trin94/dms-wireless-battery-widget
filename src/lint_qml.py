@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-"""Run qmllint on QML files with the DMS qs.* imports resolved."""
+"""Run qmllint on QML files with the Dux Shell qs.* imports resolved."""
 
 import shutil
 import subprocess
@@ -31,9 +31,9 @@ def main(files: list[str]) -> int:
     if not files:
         return 0
 
-    dms_root = qml_tooling.find_dms_root()
-    if dms_root is None:
-        sys.stderr.write("error: no DMS installation found\n")
+    shell_root = qml_tooling.find_shell_root()
+    if shell_root is None:
+        sys.stderr.write("error: no Dux Shell installation found\n")
         return 1
 
     qmllint = find_qmllint()
@@ -41,7 +41,7 @@ def main(files: list[str]) -> int:
         sys.stderr.write("error: no qmllint executable found\n")
         return 1
 
-    qml_tooling.generate(dms_root)
+    qml_tooling.generate(shell_root)
 
     flags = [flag for path in qml_tooling.import_paths() for flag in ("-I", str(path))]
     return subprocess.run([qmllint, "-W", "0", *flags, *files], check=False).returncode
