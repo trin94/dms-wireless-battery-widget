@@ -21,8 +21,8 @@ rev = "v2.6.5"
 hooks = [
     {
         id = "biome-check",
-        name = "format json",
-        files = '\.(jsonc?)$',
+        name = "format json and yaml",
+        files = '\.(jsonc?|ya?ml)$',
         exclude = '\.config/biome\.jsonc|skills-lock\.json',
         args = ["--config-path=.config"],
     },
@@ -39,17 +39,6 @@ hooks = [
         args = [
             "--offline",
         ]
-    },
-]
-
-[[repos]]
-repo = "https://github.com/google/yamlfmt"
-rev = "v0.21.0"
-hooks = [
-    {
-        id = "yamlfmt",
-        name = "format yaml",
-        args = ["-conf", ".config/yamlfmt.yaml"],
     },
 ]
 
