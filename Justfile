@@ -30,7 +30,7 @@ format:
 # Update the pre-commit hook versions
 [group('dev')]
 update-hooks:
-    uv run prek auto-update
+    uv run prek update
 
 # Upgrade all Python dependencies
 [group('dev')]

@@ -28,6 +28,7 @@ SYSTEM_QML_DIRS = (
 
 SINGLETON_PRAGMA = re.compile(r"^\s*pragma\s+Singleton", re.MULTILINE)
 MODULE_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+OPAQUE_TYPE_MARKER = re.compile(r"isTypeOpaque: true;?\s*")
 
 
 def find_dms_root() -> Path | None:
@@ -104,6 +105,8 @@ def generate_bridge_types() -> None:
             str(Path(scratch) / "registration.cpp"),
             str(metatypes),
         )
+    # A system qmllint older than Qt 6.12 rejects this registrar field
+    qmltypes.write_text(OPAQUE_TYPE_MARKER.sub("", qmltypes.read_text(encoding="utf-8")), encoding="utf-8")
     (target / "qmldir").write_text(f"module {BRIDGE_MODULE}\ntypeinfo {qmltypes.name}\n", encoding="utf-8")
 
 
